@@ -23,9 +23,9 @@ jobs:
           path: "scripts/requirements.txt"
       
       # Echo secret
-      - name: Test script
+      - name: Test echo
         env:
-          DEMO_KEY: '${{ secrets.DEMO_KEY }}'
+          DEMO_KEY: ${{ secrets.DEMO_KEY }}
         run: echo $DEMO_KEY
 
       # Runs test script
