@@ -25,4 +25,4 @@ jobs:
       # Runs test script
       - name: Test script
         run: |
-          python scripts/test.py
+          python scripts/main.py
