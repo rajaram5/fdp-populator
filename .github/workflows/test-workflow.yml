@@ -1,4 +1,4 @@
-name: RDF files validation
+name: Test workflow
 
 on:
   push:
