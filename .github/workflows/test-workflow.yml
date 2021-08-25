@@ -1,0 +1,28 @@
+name: RDF files validation
+
+on:
+  push:
+    branches: [ main ]
+    
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2        
+      # Setup python 3.8
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8          
+      # Install python script dependencies
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v2
+        with:
+          path: "scripts/requirements.txt"
+
+      # Runs test script
+      - name: Test script
+        run: |
+          python scripts/test.py
