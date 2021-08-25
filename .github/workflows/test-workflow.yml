@@ -21,6 +21,12 @@ jobs:
         uses: py-actions/py-dependency-install@v2
         with:
           path: "scripts/requirements.txt"
+      
+      # Echo secret
+      - name: Test script
+        env:
+          DEMO_KEY: '${{ secrets.DEMO_KEY }}'
+        run: echo $DEMO_KEY
 
       # Runs test script
       - name: Test script
