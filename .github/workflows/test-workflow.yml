@@ -26,7 +26,5 @@ jobs:
       - name: Test script
         env:
           TEST_SECRET: ${{secrets.TEST_SECRET}}
-            
-        		
         run: |
           python scripts/main.py
