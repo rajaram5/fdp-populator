@@ -25,5 +25,5 @@ jobs:
       # Runs test script
       - name: Test script
         env:
-          DEMO_KEY: ${{ secrets.DEMO_KEY }}
+          DEMO_KEY: '${{ secrets.DEMO_KEY }}'
         run: python scripts/main.py
