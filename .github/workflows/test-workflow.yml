@@ -34,7 +34,7 @@ jobs:
        
       # Move input file
       - name: Move input file
-        run: mv catalogs.csv script/input.csv 
+        run: mv catalogs.csv scripts/input.csv 
 
       # Runs test script
       - name: Test script
