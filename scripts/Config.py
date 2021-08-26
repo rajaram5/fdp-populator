@@ -1,4 +1,7 @@
 import os
+import glob
+
+print("Files from the parent dir : " + str(glob.glob("../*")))
 
 FDP_URL = os.environ['FDP_URL']
 FDP_USERNAME = os.environ['FDP_USERNAME']
