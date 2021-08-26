@@ -20,10 +20,7 @@ jobs:
       - name: Install Python dependencies
         uses: py-actions/py-dependency-install@v2
         with:
-          path: "scripts/requirements.txt"      
-      # List files
-      - name: List content
-        run: ls
+          path: "scripts/requirements.txt"
       # Runs test script
       - name: Test script
         env:
