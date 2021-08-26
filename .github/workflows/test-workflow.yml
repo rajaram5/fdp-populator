@@ -31,6 +31,10 @@ jobs:
       # List files
       - name: List content
         run: ls
+       
+      # Move input file
+      - name: Move input file
+        run: mv catalogs.csv script/input.csv 
 
       # Runs test script
       - name: Test script
