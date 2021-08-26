@@ -27,6 +27,10 @@ jobs:
         env:
           DEMO_KEY: ${{ secrets.DEMO_KEY }}
         run: echo $DEMO_KEY
+      
+      # List files
+      - name: List content
+        run: ls
 
       # Runs test script
       - name: Test script
