@@ -24,9 +24,9 @@ jobs:
       # List files
       - name: List content
         run: ls
-      # Runs test script
+      # Runs test script      
+      - uses: actions/checkout@v2
       - name: Test script
-        uses: actions/checkout@v2
         env:
           FDP_URL: ${{ secrets.FDP_URL }}
           FDP_PERSISTENT_URL: ${{ secrets.FDP_PERSISTENT_URL }}
