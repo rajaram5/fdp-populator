@@ -32,4 +32,5 @@ jobs:
           FDP_PERSISTENT_URL: ${{ secrets.FDP_PERSISTENT_URL }}
           FDP_USERNAME: ${{ secrets.FDP_USERNAME }}
           FDP_PASSWORD: ${{ secrets.FDP_PASSWORD }}
+          INPUT_FILE: "../catalogs.csv"
         run: python main.py
