@@ -8,3 +8,5 @@ scripts/__pycache__/
 scripts/input.csv
 
 .idea/
+
+*.csv#
