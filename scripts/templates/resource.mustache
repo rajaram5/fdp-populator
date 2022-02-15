@@ -1,0 +1,15 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix loc: <http://localhost/>.
+
+loc:new
+    a dcat:Resource;
+    dct:description "{{description}}";
+    dct:hasVersion "1";
+    dct:isPartOf <{{&parent_url}}>;
+    dct:publisher <{{&publisher_url}}>;
+    dct:title "{{title}}".
+
+<{{&publisher_url}}> a foaf:Agent;
+    foaf:name "{{publisher_name}}".
