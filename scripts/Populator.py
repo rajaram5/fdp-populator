@@ -59,6 +59,8 @@ class Populator:
         if not self.FDP_CLIENT.does_metadata_exists(parent_url):
             raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
 
+        print("The catalog <"+parent_url+"> exist")
+
         graph = Graph()
 
         # create resource triples

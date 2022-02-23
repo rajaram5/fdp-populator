@@ -40,6 +40,7 @@ class FDPClient:
             'Content-Type': "text/turtle",
             'Authorization': authorization
         }
+        print(data)
         response = requests.request("POST", url, data=data.encode('utf-8'), headers=headers)
         print(response.headers)
         try:
