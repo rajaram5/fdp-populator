@@ -100,7 +100,6 @@ class Populator:
             graph.parse(data=body, format="turtle")
 
         post_body = graph.serialize(format='turtle')
-        print("Debugger here" + post_body)
         dataset_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "dataset")
         print("New dataset created : " + dataset_url)
         return dataset_url
