@@ -1,6 +1,5 @@
 import Resource
 
-
 class Dataset(Resource.Resource):
     """
     This class extends Resource class with properties specific to dataset properties
