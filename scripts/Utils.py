@@ -17,7 +17,6 @@ class Utils:
                                       'parent_url': resource.PARENT_URL,
                                       'publisher_url': resource.PUBLISHER_URL,
                                       'publisher_name': resource.PUBLISHER_URL})
-            print("Debugger here" + turtle_string)
             graph.parse(data=turtle_string, format="turtle")
 
     def add_language_triples(self, resource, graph):
