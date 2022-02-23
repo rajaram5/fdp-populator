@@ -65,6 +65,7 @@ class Populator:
 
         # create resource triples
         self.UTILS.add_resource_triples(dataset, graph)
+        print("Debugger here")
         # Create language triples
         self.UTILS.add_language_triples(dataset, graph)
         # Create license triples
