@@ -88,7 +88,6 @@ class Populator:
             keyword_str = keyword_str + ' "' + keyword + '",'
         keyword_str = keyword_str[:-1]
 
-        print("Debugger here" + keyword_str)
         # Create themes list
         theme_str = ""
         for theme in dataset.THEMES:
@@ -101,6 +100,7 @@ class Populator:
             graph.parse(data=body, format="turtle")
 
         post_body = (graph.serialize(format='turtle')).decode("utf-8")
+        print("Debugger here" + post_body)
         dataset_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "dataset")
         print("New dataset created : " + dataset_url)
         return dataset_url
