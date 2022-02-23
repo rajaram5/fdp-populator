@@ -99,7 +99,7 @@ class Populator:
             body = chevron.render(f, {'keyword': keyword_str, 'theme': theme_str})
             graph.parse(data=body, format="turtle")
 
-        post_body = (graph.serialize(format='turtle')).decode("utf-8")
+        post_body = graph.serialize(format='turtle')
         print("Debugger here" + post_body)
         dataset_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "dataset")
         print("New dataset created : " + dataset_url)
@@ -154,7 +154,7 @@ class Populator:
                                       'media_type': distribution.MEDIA_TYPE})
             graph.parse(data=body, format="turtle")
 
-        post_body = (graph.serialize(format='turtle')).decode("utf-8")
+        post_body = graph.serialize(format='turtle')
         metadata_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "distribution")
         print("New distribution created : " + metadata_url)
         return metadata_url
