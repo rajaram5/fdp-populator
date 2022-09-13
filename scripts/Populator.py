@@ -29,23 +29,24 @@ class Populator:
         # Populate FDP with datasets
         for dataset_name, dataset in datasets.items():
             dataset_url = self.create_dataset(dataset)
-            if dataset_name in distributions:
-                distribution = distributions[dataset_name]
-                distribution.PARENT_URL = dataset_url
+            # Populate FDP with distribution(s) as child to dataset
+            for distribution_name, distribution in distributions.items():
+                if distribution.DATASET_NAME == dataset_name:
+                    distribution.PARENT_URL = dataset_url
 
-                # This logic is required since both download and access URLs are captured in same row
-                download_url = distribution.DOWNLOAD_URL
-                distribution_name = distribution.TITLE
-                if distribution.ACCESS_URL:
-                    distribution.TITLE = "Access distribution of : " + distribution_name
-                    distribution.DOWNLOAD_URL = None
-                    self.create_distribution(distribution)
+                    # This logic is required since both download and access URLs are captured in same row
+                    download_url = distribution.DOWNLOAD_URL
+                    distribution_name = distribution.TITLE
+                    if distribution.ACCESS_URL:
+                        distribution.TITLE = "Access distribution of : " + distribution_name
+                        distribution.DOWNLOAD_URL = None
+                        self.create_distribution(distribution)
 
-                if download_url:
-                    distribution.TITLE = "Downloadable distribution of : " + distribution_name
-                    distribution.ACCESS_URL = None
-                    distribution.DOWNLOAD_URL = download_url
-                    self.create_distribution(distribution)
+                    if download_url:
+                        distribution.TITLE = "Downloadable distribution of : " + distribution_name
+                        distribution.ACCESS_URL = None
+                        distribution.DOWNLOAD_URL = download_url
+                        self.create_distribution(distribution)
 
     def create_dataset(self, dataset):
         """
@@ -233,8 +234,8 @@ class Populator:
             if reader.line_num > 1:
                 print(row)
                 title = row[0]
-                publisher_url = row[1]
-                dataset_name = row[2]
+                dataset_name = row[1]
+                publisher_url = row[2]
                 description = row[3]
                 language = row[4]
                 license = row[5]
