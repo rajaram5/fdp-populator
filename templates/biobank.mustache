@@ -11,19 +11,20 @@
 loc:new a ejp:Biobank ;
   dct:isPartOf <{{&parent_url}}>;
   dct:hasVersion "1";
-  {{! dct:publisher :organisation ;         }}
+  dct:publisher :organisation ;        
   dct:title "Austrian Bone Marrow Donor Registry" ;
   dct:description "Donor registry" ;
   ejp:populationCoverage  :population_coverage ;
   dcat:theme  ordo:Orphanet_171895 ;
   foaf:page <http://www.stammzellspende.at> .
 
-{{! :organisation a foaf:Organisation ;
+:organisation a foaf:Organisation ;
   dct:title "Fonds Österreichisches Stammzellregister" ;
-  dct:spatial  :location . }}
+  foaf:name "Fonds Österreichisches Stammzellregister" ; {{!Necessary for FDP to accept it, but should be removed}}
+  dct:spatial  :location .
 
 :population_coverage  a sio:SIO_001166 ;
   rdfs:label  "National" .
 
-{{! :location a dct:Location ;
-  dct:title  "Austria" . }}
+:location a dct:Location ;
+  dct:title  "Austria" .
