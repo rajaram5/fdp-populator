@@ -6,10 +6,28 @@
 @prefix ejp:   <http://purl.org/ejp-rd/vocabulary/> .
 @prefix sio:  <http://semanticscience.org/resource/> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct:      <http://purl.org/dc/terms/> .
 
 :BiobankShape a sh:NodeShape ;
   sh:targetClass ejp:Biobank ;
   sh:property [
+    sh:path dct:title ;
+    sh:nodeKind sh:Literal ;
+    sh:minCount 1 ;
+    sh:maxCount  1 ;
+    dash:editor dash:TextFieldEditor ;
+  ], [
+    sh:path dct:description ;
+    sh:nodeKind sh:Literal ;
+    sh:maxCount 1 ;
+    dash:editor dash:TextAreaEditor ;
+  ], [
+    sh:path dct:publisher ;
+    sh:node :AgentShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    dash:editor dash:BlankNodeEditor ;
+  ], [
 	sh:path dcat:theme ;
 	sh:nodeKind sh:IRI ;
 	sh:minCount 1 ;
