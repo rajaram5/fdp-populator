@@ -1,5 +1,6 @@
 import FDPClient
 import Dataset
+import Biobank
 import Config
 import chevron
 import csv
@@ -22,31 +23,37 @@ class Populator:
         This __init__ method exacts datasets and distribution objects from the input CSV files. These objects are used to
         create metadata entries in the FAIR Data Point.
         """
-        # GET datasets
-        datasets = self.__get_datasets__()
-        # GET distributions
-        distributions = self.__get_distributions__()
-        # Populate FDP with datasets
-        for dataset_name, dataset in datasets.items():
-            dataset_url = self.create_dataset(dataset)
-            # Populate FDP with distribution(s) as child to dataset
-            for distribution_name, distribution in distributions.items():
-                if distribution.DATASET_NAME == dataset_name:
-                    distribution.PARENT_URL = dataset_url
+        # # GET datasets
+        # datasets = self.__get_datasets__()
+        # # GET distributions
+        # distributions = self.__get_distributions__()
+        # # Populate FDP with datasets
+        # for dataset_name, dataset in datasets.items():
+        #     dataset_url = self.create_dataset(dataset)
+        #     # Populate FDP with distribution(s) as child to dataset
+        #     for distribution_name, distribution in distributions.items():
+        #         if distribution.DATASET_NAME == dataset_name:
+        #             distribution.PARENT_URL = dataset_url
 
-                    # This logic is required since both download and access URLs are captured in same row
-                    download_url = distribution.DOWNLOAD_URL
-                    distribution_name = distribution.TITLE
-                    if distribution.ACCESS_URL:
-                        distribution.TITLE = "Access distribution of : " + distribution_name
-                        distribution.DOWNLOAD_URL = None
-                        self.create_distribution(distribution)
+        #             # This logic is required since both download and access URLs are captured in same row
+        #             download_url = distribution.DOWNLOAD_URL
+        #             distribution_name = distribution.TITLE
+        #             if distribution.ACCESS_URL:
+        #                 distribution.TITLE = "Access distribution of : " + distribution_name
+        #                 distribution.DOWNLOAD_URL = None
+        #                 self.create_distribution(distribution)
 
-                    if download_url:
-                        distribution.TITLE = "Downloadable distribution of : " + distribution_name
-                        distribution.ACCESS_URL = None
-                        distribution.DOWNLOAD_URL = download_url
-                        self.create_distribution(distribution)
+        #             if download_url:
+        #                 distribution.TITLE = "Downloadable distribution of : " + distribution_name
+        #                 distribution.ACCESS_URL = None
+        #                 distribution.DOWNLOAD_URL = download_url
+        #                 self.create_distribution(distribution)
+
+        biobank = Biobank.Biobank(Config.CATALOG_URL, "test_biobank", "test of biobank", 
+            ["https://example.org/ont/example","https://example.org/ont/example2"],
+            "https://example.org/biobank")
+
+        print(biobank)
 
     def create_dataset(self, dataset):
         """
