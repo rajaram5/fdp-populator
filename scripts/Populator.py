@@ -50,10 +50,10 @@ class Populator:
         #                 self.create_distribution(distribution)
 
         biobank = Biobank.Biobank(Config.CATALOG_URL, "test_biobank", "test of biobank", 
-            ["https://example.org/ont/example","https://example.org/ont/example2"],
-            "https://example.org/biobank")
+            ["https://example.org/ont/example", "https://example.org/ont/example2"],
+            "https://example.org/biobank_publisher", "https://example.org/biobank")
 
-        print(biobank)
+        self.create_biobank(biobank)
 
     def create_dataset(self, dataset):
         """
@@ -165,6 +165,32 @@ class Populator:
         metadata_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "distribution")
         print("New distribution created : " + metadata_url)
         return metadata_url
+
+    def create_biobank(self, biobank):
+        """
+        Method to create biobank in FDP
+
+        :param biobank: Provide biobank object
+        :return: FDP's biobank URL
+        """
+        parent_url = biobank.PARENT_URL
+
+        if not self.FDP_CLIENT.does_metadata_exists(parent_url):
+            raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
+
+        print("The catalog <"+parent_url+"> exist")
+
+        graph = Graph()
+
+        with open('../templates/biobank.mustache', 'r') as f:
+            body = chevron.render(f, {'parent_url': biobank.PARENT_URL})
+            graph.parse(data=body, format="turtle")
+
+        post_body = graph.serialize(format='turtle')
+        print(post_body)
+        biobank_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "biobank")
+        print("New biobank created : " + biobank_url)
+        return biobank_url
 
     """
     """

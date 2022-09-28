@@ -6,10 +6,11 @@ class Biobank():
     TITLE = None
     DESCRIPTION = None
     THEMES = []
+    PUBLISHER = None
     LANDING_PAGE = None
 
 
-    def __init__(self, parent_url, title, description, themes, page):
+    def __init__(self, parent_url, title, description, themes, publisher, page):
         """
 
         :param parent_url: Parent's catalog URL of a biobank. NOTE this url should exist in an FDP
@@ -23,4 +24,5 @@ class Biobank():
         self.TITLE = title
         self.DESCRIPTION = description
         self.THEMES = themes
+        self.PUBLISHER = publisher
         self.LANDING_PAGE = page
