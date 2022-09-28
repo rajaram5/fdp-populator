@@ -9,4 +9,5 @@ scripts/input.csv
 
 .idea/
 
-*.csv#
+*.csv
+setup_env.sh
