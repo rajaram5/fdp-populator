@@ -49,9 +49,10 @@ class Populator:
         #                 distribution.DOWNLOAD_URL = download_url
         #                 self.create_distribution(distribution)
 
-        biobank = Biobank.Biobank(Config.CATALOG_URL, "test_biobank", "test of biobank", 
+        biobank = Biobank.Biobank(Config.CATALOG_URL, "Biobank test",
+            "Test of biobank pushed to FDP using FDP populator.", "National",
             ["https://example.org/ont/example", "https://example.org/ont/example2"],
-            "https://example.org/biobank_publisher", "https://example.org/biobank")
+            "https://example.org/biobank_publisher", ["https://example.org/biobank", "https://example.org/extra_page"])
 
         self.create_biobank(biobank)
 
@@ -180,12 +181,33 @@ class Populator:
 
         print("The catalog <"+parent_url+"> exist")
 
+
+        # Create themes list
+        theme_str = ""
+        for theme in biobank.THEMES:
+            theme_str = theme_str + " <" + theme + ">,"
+        theme_str = theme_str[:-1]
+
+        # Create pages list
+        page_str = ""
+        for page in biobank.LANDING_PAGES:
+            page_str = page_str + " <" + page + ">,"
+        page_str = page_str[:-1]
+
+        # Render RDF
         graph = Graph()
 
         with open('../templates/biobank.mustache', 'r') as f:
-            body = chevron.render(f, {'parent_url': biobank.PARENT_URL})
+            body = chevron.render(f, {'parent_url': biobank.PARENT_URL,
+                                      'title': biobank.TITLE,
+                                      'description': biobank.DESCRIPTION,
+                                      'populationcoverage': biobank.POPULATIONCOVERAGE,
+                                      'themes': theme_str,
+                                      'publisher': biobank.PUBLISHER,
+                                      'pages': page_str})
             graph.parse(data=body, format="turtle")
 
+        # Serialize RDF and send to FDP
         post_body = graph.serialize(format='turtle')
         print(post_body)
         biobank_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "biobank")
