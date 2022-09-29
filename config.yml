@@ -1,3 +1,5 @@
-catalog_url: "http://178.63.49.197:8050/catalog/f4a7d4db-65ae-4eac-ba92-7ccffe15bf64"
-dataset_file: "test-input/datasets.csv"
-distribution: "test-input/distributions.csv"
+catalog_url: "http://localhost/catalog/845dd322-e933-4b34-9376-ccc7f2e29a5a"
+# dataset_file: "CAKUT-input/datasets.csv"
+# distribution: "CAKUT-input/distributions.csv"
+# dataset_file: "IBM-input/datasets.csv"
+# distribution: "IBM-input/distributions.csv"

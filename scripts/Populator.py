@@ -56,11 +56,12 @@ class Populator:
             "https://example.org/biobank_publisher", ["https://example.org/biobank", "https://example.org/extra_page"])
 
         organisation = Organisation.Organisation(Config.CATALOG_URL, "Biobank organisation",
-            "This is an organisation", "The Netherlands", "https://example.org/biobankorganisation")
+            "This is an organisation", "The Netherlands", "Leiden", ["https://example.org/biobankorganisation"])
 
         print(biobank)
         print(organisation)
-        #self.create_biobank(biobank)
+        self.create_biobank(biobank)
+        #self.create_organisation(organisation)
 
     def create_dataset(self, dataset):
         """
@@ -172,6 +173,46 @@ class Populator:
         metadata_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "distribution")
         print("New distribution created : " + metadata_url)
         return metadata_url
+
+    def create_organisation(self, organisation):
+        """
+        Method to create organisation in FDP
+
+        :param biobank: Provide organisation object
+        :return: FDP's organisation URL
+        """
+        parent_url = organisation.PARENT_URL
+
+        if not self.FDP_CLIENT.does_metadata_exists(parent_url):
+            raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
+
+        print("The catalog <"+parent_url+"> exist")
+
+        # Create pages list
+        page_str = ""
+        for page in organisation.LANDING_PAGES:
+            page_str = page_str + " <" + page + ">,"
+        page_str = page_str[:-1]
+
+        # Render RDF
+        graph = Graph()
+
+        with open('../templates/organisation.mustache', 'r') as f:
+            body = chevron.render(f, {'parent_url': organisation.PARENT_URL,
+                                      'title': organisation.TITLE,
+                                      'description': organisation.DESCRIPTION,
+                                      'location_title': organisation.LOCATION_TITLE,
+                                      'location_description': organisation.LOCATION_DESCRIPTION,
+                                      'pages': page_str})
+            print(body)
+            graph.parse(data=body, format="turtle")
+
+        # Serialize RDF and send to FDP
+        post_body = graph.serialize(format='turtle')
+        print(post_body)
+        organisation_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "organisation")
+        print("New organisation created : " + organisation_url)
+        return organisation_url
 
     def create_biobank(self, biobank):
         """

@@ -1,0 +1,15 @@
+@prefix : <http://purl.org/ejp-rd/metadata-model/v1/example-rdf/> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix loc: <http://localhost/>.
+
+loc:new  a  foaf:Organisation ;
+  dct:isPartOf <{{&parent_url}}>;
+  dct:title "{{title}}" ;
+  dct:description "{{description}}" ;
+  dct:spatial :location ;
+  foaf:page {{&pages}} .
+  
+:location a dct:Location ;
+  dct:title "{{location_title}}" ;
+  dct:description "{{location_description}}" .
