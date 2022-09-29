@@ -1,5 +1,6 @@
 import FDPClient
 import Dataset
+import Organisation
 import Biobank
 import Config
 import chevron
@@ -54,7 +55,12 @@ class Populator:
             ["https://example.org/ont/example", "https://example.org/ont/example2"],
             "https://example.org/biobank_publisher", ["https://example.org/biobank", "https://example.org/extra_page"])
 
-        self.create_biobank(biobank)
+        organisation = Organisation.Organisation(Config.CATALOG_URL, "Biobank organisation",
+            "This is an organisation", "The Netherlands", "https://example.org/biobankorganisation")
+
+        print(biobank)
+        print(organisation)
+        #self.create_biobank(biobank)
 
     def create_dataset(self, dataset):
         """
