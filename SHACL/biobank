@@ -41,7 +41,7 @@
   ], [
 	sh:path foaf:page ;
 	sh:nodeKind sh:IRI ;
-	sh:maxCount 1 ;
+	// sh:maxCount 1 ; # Remove this?
 	dash:editor dash:URIEditor ;
 	dash:viewer dash:LabelViewer ;
   ] ,[
