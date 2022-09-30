@@ -2,6 +2,7 @@ import FDPClient
 import Dataset
 import Organisation
 import Biobank
+import Patientregistry
 import Config
 import chevron
 import openpyxl
@@ -53,6 +54,8 @@ class Populator:
 
         organisations = self.__get_organisations__()
         biobanks = self.__get_biobanks__()
+        patientregistries = self.__get_patientregistries__()
+        print(patientregistries)
 
         # biobanks = [Biobank.Biobank(Config.CATALOG_URL, None, "Biobank test",
         #     "Test of biobank pushed to FDP using FDP populator.", "National",
@@ -63,12 +66,16 @@ class Populator:
         #     "This is an organisation pushed to FDP using FDP populator", "The Netherlands", 
         #     "Leiden", ["https://example.org/biobankorganisation"])]
 
-        for organisation in organisations:
+        for organisation_name, organisation in organisations.items():
             organisation_url = self.create_organisation(organisation)
-            for biobank in biobanks:
+            for biobank_name, biobank in biobanks.items():
                 if biobank.PUBLISHER_NAME == organisation.TITLE:
                     biobank.PUBLISHER_URL = organisation_url
                     self.create_biobank(biobank)
+            for patientregistry_name, patientregistry in patientregistries.items():
+                if patientregistry.PUBLISHER_NAME == organisation.TITLE:
+                    patientregistry.PUBLISHER_URL = organisation_url
+                    self.create_patientregistry(patientregistry)
         
         # for biobank in biobanks:
             
@@ -274,6 +281,53 @@ class Populator:
         print("New biobank created : " + biobank_url)
         return biobank_url
 
+    def create_patientregistry(self, patientregistry):
+        """
+        Method to create patient registry in FDP
+
+        :param patient registry: Provide patient registry object
+        :return: FDP's patient registry URL
+        """
+        parent_url = patientregistry.PARENT_URL
+
+        if not self.FDP_CLIENT.does_metadata_exists(parent_url):
+            raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
+
+        print("The catalog <"+parent_url+"> exist")
+
+
+        # Create themes list
+        theme_str = ""
+        for theme in patientregistry.THEMES:
+            theme_str = theme_str + " <" + theme + ">,"
+        theme_str = theme_str[:-1]
+
+        # Create pages list
+        page_str = ""
+        for page in patientregistry.LANDING_PAGES:
+            page_str = page_str + " <" + page + ">,"
+        page_str = page_str[:-1]
+
+        # Render RDF
+        graph = Graph()
+
+        with open('../templates/patientregistry.mustache', 'r') as f:
+            body = chevron.render(f, {'parent_url': patientregistry.PARENT_URL,
+                                      'title': patientregistry.TITLE,
+                                      'description': patientregistry.DESCRIPTION,
+                                      'populationcoverage': patientregistry.POPULATIONCOVERAGE,
+                                      'themes': theme_str,
+                                      'publisher': patientregistry.PUBLISHER_URL,
+                                      'pages': page_str})
+            graph.parse(data=body, format="turtle")
+
+        # Serialize RDF and send to FDP
+        post_body = graph.serialize(format='turtle')
+        print(post_body)
+        patientregistry_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "patientregistry")
+        print("New patient registry created : " + patientregistry_url)
+        return patientregistry_url
+        
     """
     """
     def __get_datasets__(self):
@@ -415,7 +469,7 @@ class Populator:
                 organisation = Organisation.Organisation(Config.CATALOG_URL, title, description, location_title, location_description, pages)
                 organisations[organisation.TITLE] = organisation
 
-        return [organisation]
+        return organisations
 
     def __get_biobanks__(self):
         """
@@ -463,4 +517,52 @@ class Populator:
                     biobank = Biobank.Biobank(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
                     biobanks[biobank.TITLE] = biobank
 
-        return [biobank]
+        return biobanks
+
+    def __get_patientregistries__(self):
+        """
+        This method creates patient registry objects by extracting content from the ejp vp input file.
+        NOTE: This method assumes that provided input file follows this spec
+        <https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx>
+
+        :return: Dict of patientregistries
+        """
+        # Open organisation excel sheet
+        wb = openpyxl.load_workbook(Config.EJP_VP_INPUT_FILE)
+        ws = wb['BiobankPatientRegistry']
+        
+        # Loop over rows of excel sheet
+        first_row = True
+        patientregistries = {}
+        for row in ws:
+            # Skip header
+            if first_row:
+                first_row=False
+                continue
+
+            if row[0].value != None:
+                # Retrieve field values from excel files
+                title = row[0].value
+                description = row[1].value
+                populationcoverage = row[2].value
+
+                themes = []
+                for theme in row[3].value.split(";"):
+                    theme = theme.strip()
+                    themes.append(theme)
+
+                publisher_name = row[4].value
+
+                pages = []
+                for page in row[5].value.split(";"):
+                    page = page.strip()
+                    pages.append(page)
+
+                resource_type = row[6].value
+
+                # Create patient registry object and add to patientregistry dictionary if it is a patientregistry
+                if resource_type == "Patient registry":
+                    patientregistry = Patientregistry.Patientregistry(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
+                    patientregistries[patientregistry.TITLE] = patientregistry
+
+        return patientregistries
