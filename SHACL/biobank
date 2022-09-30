@@ -23,10 +23,11 @@
     dash:editor dash:TextAreaEditor ;
   ], [
     sh:path dct:publisher ;
-    sh:node :AgentShape ;
+	  sh:nodeKind sh:IRI ;
     sh:minCount 1 ;
     sh:maxCount 1 ;
-    dash:editor dash:BlankNodeEditor ;
+    dash:editor dash:URIEditor ;
+    dash:viewer dash:LabelViewer ;
   ], [
 	sh:path dcat:theme ;
 	sh:nodeKind sh:IRI ;
@@ -56,5 +57,5 @@
 	sh:in ("National" "International" "Regional" "European");
 	sh:nodeKind sh:Literal ;
 	dash:editor dash:TextFieldEditor;
-	dash:viewer dash:LabelViewer
+	dash:viewer dash:LiteralViewer
   ] .

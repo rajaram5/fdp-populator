@@ -50,18 +50,28 @@ class Populator:
         #                 distribution.DOWNLOAD_URL = download_url
         #                 self.create_distribution(distribution)
 
-        biobank = Biobank.Biobank(Config.CATALOG_URL, "Biobank test",
+        biobanks = [Biobank.Biobank(Config.CATALOG_URL, None, "Biobank test",
             "Test of biobank pushed to FDP using FDP populator.", "National",
-            ["https://example.org/ont/example", "https://example.org/ont/example2"],
-            "https://example.org/biobank_publisher", ["https://example.org/biobank", "https://example.org/extra_page"])
+            ["https://example.org/ont/example", "https://example.org/ont/example2"], "Biobank organisation",
+            ["https://example.org/biobank", "https://example.org/extra_page"])]
 
-        organisation = Organisation.Organisation(Config.CATALOG_URL, "Biobank organisation",
-            "This is an organisation", "The Netherlands", "Leiden", ["https://example.org/biobankorganisation"])
+        organisations = [Organisation.Organisation(Config.CATALOG_URL, "Biobank organisation",
+            "This is an organisation pushed to FDP using FDP populator", "The Netherlands", 
+            "Leiden", ["https://example.org/biobankorganisation"])]
 
-        print(biobank)
-        print(organisation)
-        self.create_biobank(biobank)
-        #self.create_organisation(organisation)
+        for organisation in organisations:
+            organisation_url = self.create_organisation(organisation)
+            for biobank in biobanks:
+                if biobank.PUBLISHER_NAME == organisation.TITLE:
+                    biobank.PUBLISHER_URL = organisation_url
+                    self.create_biobank(biobank)
+        
+        # for biobank in biobanks:
+            
+        # print(biobank)
+        # print(organisation)
+        # self.create_biobank(biobank)
+        # #self.create_organisation(organisation)
 
     def create_dataset(self, dataset):
         """
@@ -250,7 +260,7 @@ class Populator:
                                       'description': biobank.DESCRIPTION,
                                       'populationcoverage': biobank.POPULATIONCOVERAGE,
                                       'themes': theme_str,
-                                      'publisher': biobank.PUBLISHER,
+                                      'publisher': biobank.PUBLISHER_URL,
                                       'pages': page_str})
             graph.parse(data=body, format="turtle")
 
