@@ -458,8 +458,9 @@ class Populator:
 
                 resource_type = row[6].value
 
-                # Create biobank object and add to biobank dictionary
-                biobank = Biobank.Biobank(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
-                biobanks[biobank.TITLE] = biobank
+                # Create biobank object and add to biobank dictionary if it is a biobank
+                if resource_type == "Biobank":
+                    biobank = Biobank.Biobank(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
+                    biobanks[biobank.TITLE] = biobank
 
         return [biobank]
