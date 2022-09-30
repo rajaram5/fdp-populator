@@ -52,8 +52,7 @@ class Populator:
         #                 self.create_distribution(distribution)
 
         organisations = self.__get_organisations__()
-        print(organisations)
-        print(len(organisations))
+        biobanks = self.__get_biobanks__()
 
         # biobanks = [Biobank.Biobank(Config.CATALOG_URL, None, "Biobank test",
         #     "Test of biobank pushed to FDP using FDP populator.", "National",
@@ -66,10 +65,10 @@ class Populator:
 
         for organisation in organisations:
             organisation_url = self.create_organisation(organisation)
-            # for biobank in biobanks:
-            #     if biobank.PUBLISHER_NAME == organisation.TITLE:
-            #         biobank.PUBLISHER_URL = organisation_url
-            #         self.create_biobank(biobank)
+            for biobank in biobanks:
+                if biobank.PUBLISHER_NAME == organisation.TITLE:
+                    biobank.PUBLISHER_URL = organisation_url
+                    self.create_biobank(biobank)
         
         # for biobank in biobanks:
             
@@ -417,3 +416,50 @@ class Populator:
                 organisations[organisation.TITLE] = organisation
 
         return [organisation]
+
+    def __get_biobanks__(self):
+        """
+        This method creates biobank objects by extracting content from the ejp vp input file.
+        NOTE: This method assumes that provided input file follows this spec
+        <https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx>
+
+        :return: Dict of biobanks
+        """
+        # Open organisation excel sheet
+        wb = openpyxl.load_workbook(Config.EJP_VP_INPUT_FILE)
+        ws = wb['BiobankPatientRegistry']
+        
+        # Loop over rows of excel sheet
+        first_row = True
+        biobanks = {}
+        for row in ws:
+            # Skip header
+            if first_row:
+                first_row=False
+                continue
+
+            if row[0].value != None:
+                # Retrieve field values from excel files
+                title = row[0].value
+                description = row[1].value
+                populationcoverage = row[2].value
+
+                themes = []
+                for theme in row[3].value.split(";"):
+                    theme = theme.strip()
+                    themes.append(theme)
+
+                publisher_name = row[4].value
+
+                pages = []
+                for page in row[5].value.split(";"):
+                    page = page.strip()
+                    pages.append(page)
+
+                resource_type = row[6].value
+
+                # Create biobank object and add to biobank dictionary
+                biobank = Biobank.Biobank(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
+                biobanks[biobank.TITLE] = biobank
+
+        return [biobank]

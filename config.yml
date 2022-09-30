@@ -1,5 +1,6 @@
 catalog_url: "http://localhost/catalog/845dd322-e933-4b34-9376-ccc7f2e29a5a"
-# dataset_file: "CAKUT-input/datasets.csv"
-# distribution: "CAKUT-input/distributions.csv"
+dataset_file: "CAKUT-input/datasets.csv"
+distribution: "CAKUT-input/distributions.csv"
 # dataset_file: "IBM-input/datasets.csv"
 # distribution: "IBM-input/distributions.csv"
+ejp_vp_file: vp_test_input/EJPRD_Resource_Metadata_template.xlsx
