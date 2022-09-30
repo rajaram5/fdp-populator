@@ -19,6 +19,7 @@ if os.path.isfile(CONFIG_FILE) :
     config = yaml.load(yaml_file, Loader=yaml.FullLoader)
     DATASET_INPUT_FILE = BASE_PATH + config['dataset_file']
     DISTRIBUTION_INPUT_FILE = BASE_PATH + config['distribution']
+    EJP_VP_INPUT_FILE = BASE_PATH + config['ejp_vp_file']
     CATALOG_URL = config['catalog_url']
 else:
     raise SystemExit("Config file does exits. Provided input file " + CONFIG_FILE)

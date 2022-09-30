@@ -4,6 +4,7 @@ import Organisation
 import Biobank
 import Config
 import chevron
+import openpyxl
 import csv
 import Utils
 import Distribution
@@ -50,21 +51,25 @@ class Populator:
         #                 distribution.DOWNLOAD_URL = download_url
         #                 self.create_distribution(distribution)
 
-        biobanks = [Biobank.Biobank(Config.CATALOG_URL, None, "Biobank test",
-            "Test of biobank pushed to FDP using FDP populator.", "National",
-            ["https://example.org/ont/example", "https://example.org/ont/example2"], "Biobank organisation",
-            ["https://example.org/biobank", "https://example.org/extra_page"])]
+        organisations = self.__get_organisations__()
+        print(organisations)
+        print(len(organisations))
 
-        organisations = [Organisation.Organisation(Config.CATALOG_URL, "Biobank organisation",
-            "This is an organisation pushed to FDP using FDP populator", "The Netherlands", 
-            "Leiden", ["https://example.org/biobankorganisation"])]
+        # biobanks = [Biobank.Biobank(Config.CATALOG_URL, None, "Biobank test",
+        #     "Test of biobank pushed to FDP using FDP populator.", "National",
+        #     ["https://example.org/ont/example", "https://example.org/ont/example2"], "Biobank organisation",
+        #     ["https://example.org/biobank", "https://example.org/extra_page"])]
+
+        # organisations = [Organisation.Organisation(Config.CATALOG_URL, "Biobank organisation",
+        #     "This is an organisation pushed to FDP using FDP populator", "The Netherlands", 
+        #     "Leiden", ["https://example.org/biobankorganisation"])]
 
         for organisation in organisations:
             organisation_url = self.create_organisation(organisation)
-            for biobank in biobanks:
-                if biobank.PUBLISHER_NAME == organisation.TITLE:
-                    biobank.PUBLISHER_URL = organisation_url
-                    self.create_biobank(biobank)
+            # for biobank in biobanks:
+            #     if biobank.PUBLISHER_NAME == organisation.TITLE:
+            #         biobank.PUBLISHER_URL = organisation_url
+            #         self.create_biobank(biobank)
         
         # for biobank in biobanks:
             
@@ -214,7 +219,6 @@ class Populator:
                                       'location_title': organisation.LOCATION_TITLE,
                                       'location_description': organisation.LOCATION_DESCRIPTION,
                                       'pages': page_str})
-            print(body)
             graph.parse(data=body, format="turtle")
 
         # Serialize RDF and send to FDP
@@ -373,4 +377,43 @@ class Populator:
                                                          compression_format, format, byte_size, dataset_name)
                 distributions[title] = distribution
         return distributions
+    
+    def __get_organisations__(self):
+        """
+        This method creates organisation objects by extracting content from the ejp vp input file.
+        NOTE: This method assumes that provided input file follows this spec
+        <https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx>
 
+        :return: Dict of organisations
+        """
+        # Open organisation excel sheet
+        wb = openpyxl.load_workbook(Config.EJP_VP_INPUT_FILE)
+        ws = wb['Organisation']
+        
+        # Loop over rows of excel sheet
+        first_row = True
+        organisations = {}
+        for row in ws:
+            # Skip header
+            if first_row:
+                first_row=False
+                continue
+
+            if row[0].value != None:
+                # Retrieve field values from excel files
+                title = row[0].value
+                description = row[1].value
+
+                pages = []
+                for page in row[2].value.split(";"):
+                    page = page.strip()
+                    pages.append(page)
+
+                location_title = row[3].value
+                location_description = row[4].value
+
+                # Create organisation object and add to organisation dictionary
+                organisation = Organisation.Organisation(Config.CATALOG_URL, title, description, location_title, location_description, pages)
+                organisations[organisation.TITLE] = organisation
+
+        return [organisation]
