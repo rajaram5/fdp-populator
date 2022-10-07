@@ -3,13 +3,21 @@
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 @prefix loc: <http://localhost/>.
 
+{{! Required triples }}
 loc:new  a  foaf:Organisation ;
   dct:isPartOf <{{&parent_url}}>;
   dct:title "{{title}}" ;
-  dct:description "{{description}}" ;
   dct:spatial :location ;
   foaf:page {{&pages}} .
   
 :location a dct:Location ;
-  dct:title "{{location_title}}" ;
-  dct:description "{{location_description}}" .
+  dct:title "{{location_title}}" .
+
+{{! Optional triples }}
+{{#description}}
+loc:new dct:description "{{description}}" .
+{{/description}}
+
+{{#location_description}}
+:location dct:description "{{location_description}}" .
+{{/location_description}}
