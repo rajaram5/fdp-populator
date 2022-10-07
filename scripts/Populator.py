@@ -55,7 +55,6 @@ class Populator:
         organisations = self.__get_organisations__()
         biobanks = self.__get_biobanks__()
         patientregistries = self.__get_patientregistries__()
-        print(patientregistries)
 
         # biobanks = [Biobank.Biobank(Config.CATALOG_URL, None, "Biobank test",
         #     "Test of biobank pushed to FDP using FDP populator.", "National",
@@ -457,10 +456,10 @@ class Populator:
                 title = row[0].value
                 description = row[1].value
 
-                pages = []
-                for page in row[2].value.split(";"):
-                    page = page.strip()
-                    pages.append(page)
+                if type(row[2].value) == str:
+                    pages = [page.strip() for page in row[2].value.split(";")]
+                else:
+                    pages = []
 
                 location_title = row[3].value
                 location_description = row[4].value
@@ -498,17 +497,17 @@ class Populator:
                 description = row[1].value
                 populationcoverage = row[2].value
 
-                themes = []
-                for theme in row[3].value.split(";"):
-                    theme = theme.strip()
-                    themes.append(theme)
+                if type(row[3].value) == str:
+                    themes = [theme.strip() for theme in row[3].value.split(";")]
+                else:
+                    themes = []
 
                 publisher_name = row[4].value
 
-                pages = []
-                for page in row[5].value.split(";"):
-                    page = page.strip()
-                    pages.append(page)
+                if type(row[5].value) == str:
+                    pages = [page.strip() for page in row[5].value.split(";")]
+                else:
+                    pages = []
 
                 resource_type = row[6].value
 
@@ -546,17 +545,17 @@ class Populator:
                 description = row[1].value
                 populationcoverage = row[2].value
 
-                themes = []
-                for theme in row[3].value.split(";"):
-                    theme = theme.strip()
-                    themes.append(theme)
+                if type(row[3].value) == str:
+                    themes = [theme.strip() for theme in row[3].value.split(";")]
+                else:
+                    themes = []
 
                 publisher_name = row[4].value
 
-                pages = []
-                for page in row[5].value.split(";"):
-                    page = page.strip()
-                    pages.append(page)
+                if type(row[5].value) == str:
+                    pages = [page.strip() for page in row[5].value.split(";")]
+                else:
+                    pages = []
 
                 resource_type = row[6].value
 

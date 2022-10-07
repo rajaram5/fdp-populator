@@ -8,14 +8,21 @@
 @prefix ordo: <http://www.orpha.net/ORDO/> .
 @prefix loc: <http://localhost/>.
 
+{{! Required triples }}
 loc:new a ejp:PatientRegistry ;
   dct:isPartOf <{{&parent_url}}>;
   dct:publisher <{{&publisher}}> ;
   dct:title "{{title}}" ;
-  dct:description "{{description}}" ;
   ejp:populationCoverage  :population_coverage ;
-  dcat:theme  {{&themes}} ;
-  foaf:page {{&pages}} .
+  dcat:theme  {{&themes}} .
 
 :population_coverage  a sio:SIO_001166 ;
   rdfs:label  "{{populationcoverage}}" .
+
+{{! Optional triples }}
+{{#description}}
+loc:new dct:description "{{description}}" .
+{{/description}}
+{{#pages}}
+loc:new foaf:page {{&pages}} .
+{{/pages}}
