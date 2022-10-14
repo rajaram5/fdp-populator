@@ -19,14 +19,14 @@ if os.path.isfile(CONFIG_FILE) :
     yaml_file = open(CONFIG_FILE)
     config = yaml.load(yaml_file, Loader=yaml.FullLoader)
 
-    # Check for FDP configuration
+    # Check for FDP template configuration
     try:
         DATASET_INPUT_FILE = BASE_PATH + config['dataset_file']
         DISTRIBUTION_INPUT_FILE = BASE_PATH + config['distribution']
     except:
         pass
 
-    # Check for VP configuration
+    # Check for VP template configuration
     try:
         EJP_VP_INPUT_FILE = BASE_PATH + config['ejp_vp_file']
     except:
