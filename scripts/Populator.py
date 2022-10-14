@@ -21,46 +21,51 @@ class Populator:
         This __init__ method exacts datasets and distribution objects from the input CSV files. These objects are used to
         create metadata entries in the FAIR Data Point.
         """
-        # GET datasets
-        datasets = self.template_reader.get_datasets()
-        # GET distributions
-        distributions = self.template_reader.get_distributions()
-        # Populate FDP with datasets
-        for dataset_name, dataset in datasets.items():
-            dataset_url = self.create_dataset(dataset)
-            # Populate FDP with distribution(s) as child to dataset
-            for distribution_name, distribution in distributions.items():
-                if distribution.DATASET_NAME == dataset_name:
-                    distribution.PARENT_URL = dataset_url
 
-                    # This logic is required since both download and access URLs are captured in same row
-                    download_url = distribution.DOWNLOAD_URL
-                    distribution_name = distribution.TITLE
-                    if distribution.ACCESS_URL:
-                        distribution.TITLE = "Access distribution of : " + distribution_name
-                        distribution.DOWNLOAD_URL = None
-                        self.create_distribution(distribution)
+        # Read FDP templates and write to FDP if configured to do this
+        if Config.DATASET_INPUT_FILE != None and Config.DISTRIBUTION_INPUT_FILE != None:
+            # GET datasets
+            datasets = self.template_reader.get_datasets()
+            # GET distributions
+            distributions = self.template_reader.get_distributions()
+            # Populate FDP with datasets
+            for dataset_name, dataset in datasets.items():
+                dataset_url = self.create_dataset(dataset)
+                # Populate FDP with distribution(s) as child to dataset
+                for distribution_name, distribution in distributions.items():
+                    if distribution.DATASET_NAME == dataset_name:
+                        distribution.PARENT_URL = dataset_url
 
-                    if download_url:
-                        distribution.TITLE = "Downloadable distribution of : " + distribution_name
-                        distribution.ACCESS_URL = None
-                        distribution.DOWNLOAD_URL = download_url
-                        self.create_distribution(distribution)
+                        # This logic is required since both download and access URLs are captured in same row
+                        download_url = distribution.DOWNLOAD_URL
+                        distribution_name = distribution.TITLE
+                        if distribution.ACCESS_URL:
+                            distribution.TITLE = "Access distribution of : " + distribution_name
+                            distribution.DOWNLOAD_URL = None
+                            self.create_distribution(distribution)
 
-        # organisations = self.template_reader.get_organisations()
-        # biobanks = self.template_reader.get_biobanks()
-        # patientregistries = self.template_reader.get_patientregistries()
+                        if download_url:
+                            distribution.TITLE = "Downloadable distribution of : " + distribution_name
+                            distribution.ACCESS_URL = None
+                            distribution.DOWNLOAD_URL = download_url
+                            self.create_distribution(distribution)
 
-        # for organisation_name, organisation in organisations.items():
-        #     organisation_url = self.create_organisation(organisation)
-        #     for biobank_name, biobank in biobanks.items():
-        #         if biobank.PUBLISHER_NAME == organisation.TITLE:
-        #             biobank.PUBLISHER_URL = organisation_url
-        #             self.create_biobank(biobank)
-        #     for patientregistry_name, patientregistry in patientregistries.items():
-        #         if patientregistry.PUBLISHER_NAME == organisation.TITLE:
-        #             patientregistry.PUBLISHER_URL = organisation_url
-        #             self.create_patientregistry(patientregistry)
+        # Read VP templates and write to FDP if configured to do this
+        if Config.EJP_VP_INPUT_FILE != None:
+            organisations = self.template_reader.get_organisations()
+            biobanks = self.template_reader.get_biobanks()
+            patientregistries = self.template_reader.get_patientregistries()
+
+            for organisation_name, organisation in organisations.items():
+                organisation_url = self.create_organisation(organisation)
+                for biobank_name, biobank in biobanks.items():
+                    if biobank.PUBLISHER_NAME == organisation.TITLE:
+                        biobank.PUBLISHER_URL = organisation_url
+                        self.create_biobank(biobank)
+                for patientregistry_name, patientregistry in patientregistries.items():
+                    if patientregistry.PUBLISHER_NAME == organisation.TITLE:
+                        patientregistry.PUBLISHER_URL = organisation_url
+                        self.create_patientregistry(patientregistry)
 
     def create_dataset(self, dataset):
         """
