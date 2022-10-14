@@ -1,15 +1,8 @@
 import FDPClient
-import TemplateReader
-import Dataset
-import Organisation
-import Biobank
-import Patientregistry
 import Config
 import chevron
-import openpyxl
-import csv
 import Utils
-import Distribution
+import TemplateReader
 from rdflib import Graph
 
 
@@ -28,62 +21,46 @@ class Populator:
         This __init__ method exacts datasets and distribution objects from the input CSV files. These objects are used to
         create metadata entries in the FAIR Data Point.
         """
-        # # GET datasets
-        # datasets = self.__get_datasets__()
-        # # GET distributions
-        # distributions = self.__get_distributions__()
-        # # Populate FDP with datasets
-        # for dataset_name, dataset in datasets.items():
-        #     dataset_url = self.create_dataset(dataset)
-        #     # Populate FDP with distribution(s) as child to dataset
-        #     for distribution_name, distribution in distributions.items():
-        #         if distribution.DATASET_NAME == dataset_name:
-        #             distribution.PARENT_URL = dataset_url
+        # GET datasets
+        datasets = self.template_reader.get_datasets()
+        # GET distributions
+        distributions = self.template_reader.get_distributions()
+        # Populate FDP with datasets
+        for dataset_name, dataset in datasets.items():
+            dataset_url = self.create_dataset(dataset)
+            # Populate FDP with distribution(s) as child to dataset
+            for distribution_name, distribution in distributions.items():
+                if distribution.DATASET_NAME == dataset_name:
+                    distribution.PARENT_URL = dataset_url
 
-        #             # This logic is required since both download and access URLs are captured in same row
-        #             download_url = distribution.DOWNLOAD_URL
-        #             distribution_name = distribution.TITLE
-        #             if distribution.ACCESS_URL:
-        #                 distribution.TITLE = "Access distribution of : " + distribution_name
-        #                 distribution.DOWNLOAD_URL = None
-        #                 self.create_distribution(distribution)
+                    # This logic is required since both download and access URLs are captured in same row
+                    download_url = distribution.DOWNLOAD_URL
+                    distribution_name = distribution.TITLE
+                    if distribution.ACCESS_URL:
+                        distribution.TITLE = "Access distribution of : " + distribution_name
+                        distribution.DOWNLOAD_URL = None
+                        self.create_distribution(distribution)
 
-        #             if download_url:
-        #                 distribution.TITLE = "Downloadable distribution of : " + distribution_name
-        #                 distribution.ACCESS_URL = None
-        #                 distribution.DOWNLOAD_URL = download_url
-        #                 self.create_distribution(distribution)
+                    if download_url:
+                        distribution.TITLE = "Downloadable distribution of : " + distribution_name
+                        distribution.ACCESS_URL = None
+                        distribution.DOWNLOAD_URL = download_url
+                        self.create_distribution(distribution)
 
-        organisations = self.template_reader.get_organisations()
-        biobanks = self.template_reader.get_biobanks()
-        patientregistries = self.template_reader.get_patientregistries()
+        # organisations = self.template_reader.get_organisations()
+        # biobanks = self.template_reader.get_biobanks()
+        # patientregistries = self.template_reader.get_patientregistries()
 
-        # biobanks = [Biobank.Biobank(Config.CATALOG_URL, None, "Biobank test",
-        #     "Test of biobank pushed to FDP using FDP populator.", "National",
-        #     ["https://example.org/ont/example", "https://example.org/ont/example2"], "Biobank organisation",
-        #     ["https://example.org/biobank", "https://example.org/extra_page"])]
-
-        # organisations = [Organisation.Organisation(Config.CATALOG_URL, "Biobank organisation",
-        #     "This is an organisation pushed to FDP using FDP populator", "The Netherlands", 
-        #     "Leiden", ["https://example.org/biobankorganisation"])]
-
-        for organisation_name, organisation in organisations.items():
-            organisation_url = self.create_organisation(organisation)
-            for biobank_name, biobank in biobanks.items():
-                if biobank.PUBLISHER_NAME == organisation.TITLE:
-                    biobank.PUBLISHER_URL = organisation_url
-                    self.create_biobank(biobank)
-            for patientregistry_name, patientregistry in patientregistries.items():
-                if patientregistry.PUBLISHER_NAME == organisation.TITLE:
-                    patientregistry.PUBLISHER_URL = organisation_url
-                    self.create_patientregistry(patientregistry)
-        
-        # for biobank in biobanks:
-            
-        # print(biobank)
-        # print(organisation)
-        # self.create_biobank(biobank)
-        # #self.create_organisation(organisation)
+        # for organisation_name, organisation in organisations.items():
+        #     organisation_url = self.create_organisation(organisation)
+        #     for biobank_name, biobank in biobanks.items():
+        #         if biobank.PUBLISHER_NAME == organisation.TITLE:
+        #             biobank.PUBLISHER_URL = organisation_url
+        #             self.create_biobank(biobank)
+        #     for patientregistry_name, patientregistry in patientregistries.items():
+        #         if patientregistry.PUBLISHER_NAME == organisation.TITLE:
+        #             patientregistry.PUBLISHER_URL = organisation_url
+        #             self.create_patientregistry(patientregistry)
 
     def create_dataset(self, dataset):
         """

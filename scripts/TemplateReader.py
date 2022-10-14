@@ -1,15 +1,8 @@
-import FDPClient
-import TemplateReader
-import Dataset
-import Organisation
-import Biobank
-import Patientregistry
 import Config
-import chevron
 import openpyxl
 import csv
-import Utils
-import Distribution
+from resource_classes import Organisation, Biobank, Patientregistry, Dataset, Distribution
+
 
 class TemplateReader:
     """
@@ -250,3 +243,58 @@ class TemplateReader:
                     patientregistries[patientregistry.TITLE] = patientregistry
 
         return patientregistries
+
+    def get_datasets_excel(self):
+        """
+        This method creates dataset objects by extracting content from the ejp vp input file.
+        NOTE: This method assumes that provided input file follows this spec
+        <https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx>
+
+        :return: Dict of datasets
+        """
+        # Open organisation excel sheet
+        wb = openpyxl.load_workbook(Config.EJP_VP_INPUT_FILE)
+        ws = wb['BiobankPatientRegistry']
+        
+        # Loop over rows of excel sheet
+        first_row = True
+        datasets = {}
+        for row in ws:
+            # Skip header
+            if first_row:
+                first_row=False
+                continue
+
+            if row[0].value != None:
+                # Retrieve field values from excel files
+                title = row[0].value
+                description = row[1].value
+
+                if type(row[2].value) == str:
+                    themes = [theme.strip() for theme in row[2].value.split(";")]
+                else:
+                    themes = []
+
+                vpconnection = row[3].value
+                license = row[4].value
+                
+                if type(row[5].value) == str:
+                    related = [item.strip() for item in row[5].value.split(";")]
+                else:
+                    related = []
+
+                version = row[6].value
+
+                if type(row[7].value) == str:
+                    keywords = [item.strip() for item in row[7].value.split(";")]
+                else:
+                    keywords = []
+
+                publisher = row[8].value
+                page = row[9].value
+
+                # Create dataset object and add to dataset dictionary
+                dataset = Dataset.Dataset(Config.CATALOG_URL, title, description, keywords, themes, publisher, "en", license, page, None)
+                datasets[dataset.TITLE] = dataset
+
+        return datasets

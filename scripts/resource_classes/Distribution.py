@@ -1,4 +1,4 @@
-import Resource
+from resource_classes import Resource
 
 class Distribution(Resource.Resource):
     """

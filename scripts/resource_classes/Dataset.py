@@ -1,4 +1,4 @@
-import Resource
+from resource_classes import Resource
 
 class Dataset(Resource.Resource):
     """
@@ -31,3 +31,7 @@ class Dataset(Resource.Resource):
         self.THEMES = themes
         self.LANDING_PAGE = page
         self.CONTACT_POINT = contact_point
+    
+    def get_RDF(self):
+        RDF = "blablabla"
+        return RDF
