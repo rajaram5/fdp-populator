@@ -1,6 +1,6 @@
-catalog_url: "http://localhost/catalog/e2aca86c-6411-425d-b594-ee962a48f9a0"
-dataset_file: "test-input2/datasets.csv"
-distribution: "test-input2/distributions.csv"
-# dataset_file: "IBM-input/datasets.csv"
-# distribution: "IBM-input/distributions.csv"
-ejp_vp_file: vp_test_input/EJPRD_Resource_Metadata_template.xlsx
+catalog_url: "http://localhost/catalog/97fb4c6d-e568-460f-a461-2cdf07f37610"
+dataset_file: "test-input/datasets.csv"
+distribution: "test-input/distributions.csv"
+# dataset_file: "test-input2/datasets.csv"
+# distribution: "test-input2/distributions.csv"
+# ejp_vp_file: vp_test_input/EJPRD_Resource_Metadata_template.xlsx
