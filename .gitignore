@@ -12,3 +12,4 @@ scripts/input.csv
 *.csv
 setup_env.sh
 scripts/resource_classes/__pycache__
+scripts/template_readers/__pycache__/

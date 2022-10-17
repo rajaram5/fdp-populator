@@ -2,7 +2,7 @@ import FDPClient
 import Config
 import chevron
 import Utils
-import TemplateReader
+from template_readers import FDPTemplateReader, VPTemplateReader
 from rdflib import Graph
 
 
@@ -13,7 +13,6 @@ class Populator:
     """
     FDP_CLIENT = FDPClient.FDPClient(Config.FDP_URL, Config.FDP_USERNAME, Config.FDP_PASSWORD,
                                      Config.FDP_PERSISTENT_URL)
-    template_reader = TemplateReader.TemplateReader()
     UTILS = Utils.Utils()
 
     def __init__(self):
@@ -24,10 +23,11 @@ class Populator:
 
         # Read FDP templates and write to FDP if configured to do this
         if Config.DATASET_INPUT_FILE != None and Config.DISTRIBUTION_INPUT_FILE != None:
-            # GET datasets
-            datasets = self.template_reader.get_datasets()
-            # GET distributions
-            distributions = self.template_reader.get_distributions()
+            # Get dataset and distribution data
+            fdp_template_reader = FDPTemplateReader.FDPTemplateReader()
+            datasets = fdp_template_reader.get_datasets()
+            distributions = fdp_template_reader.get_distributions()
+
             # Populate FDP with datasets
             for dataset_name, dataset in datasets.items():
                 dataset_url = self.create_resource(dataset, "dataset")
@@ -53,9 +53,10 @@ class Populator:
         # Read VP templates and write to FDP if configured to do this
         if Config.EJP_VP_INPUT_FILE != None:
             # Read the excel template
-            organisations = self.template_reader.get_organisations()
-            biobanks = self.template_reader.get_biobanks()
-            patientregistries = self.template_reader.get_patientregistries()
+            vp_template_reader = VPTemplateReader.VPTemplateReader()
+            organisations = vp_template_reader.get_organisations()
+            biobanks = vp_template_reader.get_biobanks()
+            patientregistries = vp_template_reader.get_patientregistries()
 
             # Create organisation entries first
             for organisation_name, organisation in organisations.items():
