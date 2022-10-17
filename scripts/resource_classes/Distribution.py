@@ -1,4 +1,7 @@
 from resource_classes import Resource
+import Utils
+import chevron
+from rdflib import Graph
 
 class Distribution(Resource.Resource):
     """
@@ -40,3 +43,49 @@ class Distribution(Resource.Resource):
         self.FORMAT = format
         self.BYTE_SIZE = byte_size
         self.DATASET_NAME = dataset_name
+    
+    def get_graph(self):
+        """
+        Method to get distribution RDF
+
+        :return: distribution RDF
+        """
+        self.UTILS = Utils.Utils()
+        graph = Graph()
+
+        # create resource triples
+        self.UTILS.add_resource_triples(self, graph)
+        # Create language triples
+        self.UTILS.add_language_triples(self, graph)
+        # Create license triples
+        self.UTILS.add_licence_triples(self, graph)
+
+        # Create byte size triples
+        if self.BYTE_SIZE:
+            with open('../templates/bytesize.mustache', 'r') as f:
+                body = chevron.render(f, {'byte_size': self.BYTE_SIZE})
+                graph.parse(data=body, format="turtle")
+
+        # Create format triples
+        if self.FORMAT:
+            with open('../templates/format.mustache', 'r') as f:
+                body = chevron.render(f, {'format': self.FORMAT})
+                graph.parse(data=body, format="turtle")
+
+        distribution_url = None
+        distribution_type = None
+
+        if self.ACCESS_URL:
+            distribution_type = "dcat:accessURL"
+            distribution_url = self.ACCESS_URL
+        elif self.DOWNLOAD_URL:
+            distribution_type = "dcat:downloadURL"
+            distribution_url = self.DOWNLOAD_URL
+
+        # create distribution triples
+        with open('../templates/distribution.mustache', 'r') as f:
+            body = chevron.render(f, {'distribution_type': distribution_type, 'distribution_url': distribution_url,
+                                      'media_type': self.MEDIA_TYPE})
+            graph.parse(data=body, format="turtle")
+
+        return graph

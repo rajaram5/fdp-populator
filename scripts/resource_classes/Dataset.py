@@ -1,4 +1,7 @@
 from resource_classes import Resource
+import Utils
+import chevron
+from rdflib import Graph
 
 class Dataset(Resource.Resource):
     """
@@ -32,6 +35,49 @@ class Dataset(Resource.Resource):
         self.LANDING_PAGE = page
         self.CONTACT_POINT = contact_point
     
-    def get_RDF(self):
-        RDF = "blablabla"
-        return RDF
+    def get_graph(self):
+        """
+        Method to get dataset RDF
+
+        :return: dataset RDF
+        """
+        self.UTILS = Utils.Utils()
+        graph = Graph()
+
+        # create resource triples
+        self.UTILS.add_resource_triples(self, graph)
+        # Create language triples
+        self.UTILS.add_language_triples(self, graph)
+        # Create license triples
+        self.UTILS.add_licence_triples(self, graph)
+
+        # Create landing page triples
+        if self.LANDING_PAGE:
+            with open('../templates/landingpage.mustache', 'r') as f:
+                body = chevron.render(f, {'page_url': self.LANDING_PAGE})
+                graph.parse(data=body, format="turtle")
+
+        # Create contact point triples
+        if self.CONTACT_POINT:
+            with open('../templates/contact.mustache', 'r') as f:
+                body = chevron.render(f, {'contact_url': self.CONTACT_POINT})
+                graph.parse(data=body, format="turtle")
+
+        # Create keywords list
+        keyword_str = ""
+        for keyword in self.KEYWORDS:
+            keyword_str = keyword_str + ' "' + keyword + '",'
+        keyword_str = keyword_str[:-1]
+
+        # Create themes list
+        theme_str = ""
+        for theme in self.THEMES:
+            theme_str = theme_str + " <" + theme + ">,"
+        theme_str = theme_str[:-1]
+
+        # create dataset triples
+        with open('../templates/dataset.mustache', 'r') as f:
+            body = chevron.render(f, {'keyword': keyword_str, 'theme': theme_str})
+            graph.parse(data=body, format="turtle")
+
+        return graph
