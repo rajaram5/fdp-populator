@@ -59,18 +59,17 @@ class Populator:
 
             # Create organisation entries first
             for organisation_name, organisation in organisations.items():
-                organisation_url = self.create_organisation(organisation)
+                organisation_url = self.create_resource(organisation, "organisation")
                 # Create biobank entries
                 for biobank_name, biobank in biobanks.items():
                     if biobank.PUBLISHER_NAME == organisation.TITLE:
                         biobank.PUBLISHER_URL = organisation_url
-                        self.create_biobank(biobank)
+                        self.create_resource(biobank, "biobank")
                 # Create patient registry entries
                 for patientregistry_name, patientregistry in patientregistries.items():
                     if patientregistry.PUBLISHER_NAME == organisation.TITLE:
                         patientregistry.PUBLISHER_URL = organisation_url
-                        self.create_patientregistry(patientregistry)
-
+                        self.create_resource(patientregistry, "patientregistry")
 
     def create_resource(self, resource, resource_type):
         """
@@ -93,139 +92,6 @@ class Populator:
 
         # Serialize graph and send to FDP
         post_body = graph.serialize(format='turtle')
-        dataset_url = self.FDP_CLIENT.fdp_create_metadata(post_body, resource_type)
-        print("New " + resource_type + " created: " + dataset_url)
-        return dataset_url
-
-    def create_organisation(self, organisation):
-        """
-        Method to create organisation in FDP
-
-        :param biobank: Provide organisation object
-        :return: FDP's organisation URL
-        """
-        parent_url = organisation.PARENT_URL
-
-        if not self.FDP_CLIENT.does_metadata_exists(parent_url):
-            raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
-
-        print("The catalog <"+parent_url+"> exist")
-
-        # Create pages list
-        page_str = ""
-        for page in organisation.LANDING_PAGES:
-            page_str = page_str + " <" + page + ">,"
-        page_str = page_str[:-1]
-
-        # Render RDF
-        graph = Graph()
-
-        with open('../templates/organisation.mustache', 'r') as f:
-            body = chevron.render(f, {'parent_url': organisation.PARENT_URL,
-                                      'title': organisation.TITLE,
-                                      'description': organisation.DESCRIPTION,
-                                      'location_title': organisation.LOCATION_TITLE,
-                                      'location_description': organisation.LOCATION_DESCRIPTION,
-                                      'pages': page_str})
-            graph.parse(data=body, format="turtle")
-
-        # Serialize RDF and send to FDP
-        post_body = graph.serialize(format='turtle')
-        print(post_body)
-        organisation_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "organisation")
-        print("New organisation created : " + organisation_url)
-        return organisation_url
-
-    def create_biobank(self, biobank):
-        """
-        Method to create biobank in FDP
-
-        :param biobank: Provide biobank object
-        :return: FDP's biobank URL
-        """
-        parent_url = biobank.PARENT_URL
-
-        if not self.FDP_CLIENT.does_metadata_exists(parent_url):
-            raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
-
-        print("The catalog <"+parent_url+"> exist")
-
-
-        # Create themes list
-        theme_str = ""
-        for theme in biobank.THEMES:
-            theme_str = theme_str + " <" + theme + ">,"
-        theme_str = theme_str[:-1]
-
-        # Create pages list
-        page_str = ""
-        for page in biobank.LANDING_PAGES:
-            page_str = page_str + " <" + page + ">,"
-        page_str = page_str[:-1]
-
-        # Render RDF
-        graph = Graph()
-
-        with open('../templates/biobank.mustache', 'r') as f:
-            body = chevron.render(f, {'parent_url': biobank.PARENT_URL,
-                                      'title': biobank.TITLE,
-                                      'description': biobank.DESCRIPTION,
-                                      'populationcoverage': biobank.POPULATIONCOVERAGE,
-                                      'themes': theme_str,
-                                      'publisher': biobank.PUBLISHER_URL,
-                                      'pages': page_str})
-            graph.parse(data=body, format="turtle")
-
-        # Serialize RDF and send to FDP
-        post_body = graph.serialize(format='turtle')
-        print(post_body)
-        biobank_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "biobank")
-        print("New biobank created : " + biobank_url)
-        return biobank_url
-
-    def create_patientregistry(self, patientregistry):
-        """
-        Method to create patient registry in FDP
-
-        :param patient registry: Provide patient registry object
-        :return: FDP's patient registry URL
-        """
-        parent_url = patientregistry.PARENT_URL
-
-        if not self.FDP_CLIENT.does_metadata_exists(parent_url):
-            raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
-
-        print("The catalog <"+parent_url+"> exist")
-
-
-        # Create themes list
-        theme_str = ""
-        for theme in patientregistry.THEMES:
-            theme_str = theme_str + " <" + theme + ">,"
-        theme_str = theme_str[:-1]
-
-        # Create pages list
-        page_str = ""
-        for page in patientregistry.LANDING_PAGES:
-            page_str = page_str + " <" + page + ">,"
-        page_str = page_str[:-1]
-
-        # Render RDF
-        graph = Graph()
-
-        with open('../templates/patientregistry.mustache', 'r') as f:
-            body = chevron.render(f, {'parent_url': patientregistry.PARENT_URL,
-                                      'title': patientregistry.TITLE,
-                                      'description': patientregistry.DESCRIPTION,
-                                      'populationcoverage': patientregistry.POPULATIONCOVERAGE,
-                                      'themes': theme_str,
-                                      'publisher': patientregistry.PUBLISHER_URL,
-                                      'pages': page_str})
-            graph.parse(data=body, format="turtle")
-
-        # Serialize RDF and send to FDP
-        post_body = graph.serialize(format='turtle')
-        print(post_body)
-        patientregistry_url = self.FDP_CLIENT.fdp_create_metadata(post_body, "patientregistry")
-        print("New patient registry created : " + patientregistry_url)
-        return patientregistry_url
+        resource_url = self.FDP_CLIENT.fdp_create_metadata(post_body, resource_type)
+        print("New " + resource_type + " created: " + resource_url)
+        return resource_url

@@ -1,3 +1,6 @@
+import chevron
+from rdflib import Graph
+
 class Organisation():
     """
     This class describes the organisation class
@@ -26,3 +29,29 @@ class Organisation():
         self.LOCATION_TITLE = location_title
         self.LOCATION_DESCRIPTION = location_description
         self.LANDING_PAGES = pages
+    
+    def get_graph(self):
+        """
+        Method to get organisation RDF
+
+        :return: organisation RDF
+        """
+        # Create pages list
+        page_str = ""
+        for page in self.LANDING_PAGES:
+            page_str = page_str + " <" + page + ">,"
+        page_str = page_str[:-1]
+
+        # Render RDF
+        graph = Graph()
+
+        with open('../templates/organisation.mustache', 'r') as f:
+            body = chevron.render(f, {'parent_url': self.PARENT_URL,
+                                      'title': self.TITLE,
+                                      'description': self.DESCRIPTION,
+                                      'location_title': self.LOCATION_TITLE,
+                                      'location_description': self.LOCATION_DESCRIPTION,
+                                      'pages': page_str})
+            graph.parse(data=body, format="turtle")
+
+        return graph
