@@ -1,5 +1,4 @@
 import Config
-import openpyxl
 import csv
 from resource_classes import Dataset, Distribution
 

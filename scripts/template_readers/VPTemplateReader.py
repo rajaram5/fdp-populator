@@ -1,7 +1,6 @@
 import Config
 import openpyxl
-import csv
-from resource_classes import Organisation, Biobank, Patientregistry, Dataset
+from resource_classes import VPOrganisation, VPBiobank, VPPatientregistry, VPDataset
 
 
 class VPTemplateReader:
@@ -44,7 +43,7 @@ class VPTemplateReader:
                 location_description = row[4].value
 
                 # Create organisation object and add to organisation dictionary
-                organisation = Organisation.Organisation(Config.CATALOG_URL, title, description, location_title, location_description, pages)
+                organisation = VPOrganisation.VPOrganisation(Config.CATALOG_URL, title, description, location_title, location_description, pages)
                 organisations[organisation.TITLE] = organisation
 
         return organisations
@@ -92,7 +91,7 @@ class VPTemplateReader:
 
                 # Create biobank object and add to biobank dictionary if it is a biobank
                 if resource_type == "Biobank":
-                    biobank = Biobank.Biobank(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
+                    biobank = VPBiobank.VPBiobank(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
                     biobanks[biobank.TITLE] = biobank
 
         return biobanks
@@ -140,7 +139,7 @@ class VPTemplateReader:
 
                 # Create patient registry object and add to patientregistry dictionary if it is a patientregistry
                 if resource_type == "Patient registry":
-                    patientregistry = Patientregistry.Patientregistry(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
+                    patientregistry = VPPatientregistry.VPPatientregistry(Config.CATALOG_URL, None, title, description, populationcoverage, themes, publisher_name, pages)
                     patientregistries[patientregistry.TITLE] = patientregistry
 
         return patientregistries
@@ -155,7 +154,7 @@ class VPTemplateReader:
         """
         # Open organisation excel sheet
         wb = openpyxl.load_workbook(Config.EJP_VP_INPUT_FILE)
-        ws = wb['BiobankPatientRegistry']
+        ws = wb['Dataset']
         
         # Loop over rows of excel sheet
         first_row = True
@@ -195,7 +194,7 @@ class VPTemplateReader:
                 page = row[9].value
 
                 # Create dataset object and add to dataset dictionary
-                dataset = Dataset.Dataset(Config.CATALOG_URL, title, description, keywords, themes, publisher, "en", license, page, None)
+                dataset = VPDataset.VPDataset(Config.CATALOG_URL, title, description, keywords, themes, publisher, "en", license, page, None, vpconnection, related, version)
                 datasets[dataset.TITLE] = dataset
 
         return datasets

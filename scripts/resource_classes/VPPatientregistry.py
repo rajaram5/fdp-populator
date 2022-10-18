@@ -1,9 +1,9 @@
 import chevron
 from rdflib import Graph
 
-class Biobank():
+class VPPatientregistry():
     """
-    This class describes the biobank class
+    This class describes the patient registry class
     """
     PARENT_URL = None
     PUBLISHER_URL = None
@@ -18,14 +18,14 @@ class Biobank():
     def __init__(self, parent_url, publisher_url, title, description, populationcoverage, themes, publisher_name, pages):
         """
 
-        :param parent_url: Parent's catalog URL of a biobank. NOTE this url should exist in an FDP
-        :param publisher_url: URL of the publisher of a biobank
-        :param title: Title of a biobank
-        :param description: Description of a biobank
-        :param populationcoverage: Description of the coverage of a biobank
-        :param themes: Themes URLs to describe a biobank
-        :param publisher_name: Name of publisher of a biobank
-        :param pages: Landing page URLs of a biobank
+        :param parent_url: Parent's catalog URL of a patient registry. NOTE this url should exist in an FDP
+        :param publisher_url: URL of the publisher of a patient registry
+        :param title: Title of a patient registry
+        :param description: Description of a patient registry
+        :param populationcoverage: Description of the coverage of a patient registry
+        :param themes: Themes URLs to describe a patient registry
+        :param publisher_name: Name of publisher of a patient registry
+        :param pages: Landing page URLs of a patient registry
         """
         self.PARENT_URL = parent_url
         self.PUBLISHER_URL = publisher_url
@@ -38,9 +38,9 @@ class Biobank():
 
     def get_graph(self):
         """
-        Method to get biobank RDF
+        Method to get patient registry RDF
 
-        :return: biobank RDF
+        :return: patient registry RDF
         """
         # Create themes list
         theme_str = ""
@@ -57,7 +57,7 @@ class Biobank():
         # Render RDF
         graph = Graph()
 
-        with open('../templates/biobank.mustache', 'r') as f:
+        with open('../templates/patientregistry.mustache', 'r') as f:
             body = chevron.render(f, {'parent_url': self.PARENT_URL,
                                       'title': self.TITLE,
                                       'description': self.DESCRIPTION,

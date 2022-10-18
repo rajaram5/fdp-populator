@@ -1,7 +1,7 @@
 import chevron
 from rdflib import Graph
 
-class Organisation():
+class VPOrganisation():
     """
     This class describes the organisation class
     """
