@@ -4,9 +4,10 @@
 @prefix loc: <http://localhost/>.
 
 {{! Required triples }}
-loc:new  a  foaf:Organisation ;
+loc:new  a  foaf:Organisation;
   dct:isPartOf <{{&parent_url}}>;
   dct:title "{{title}}" ;
+  foaf:name "{{title}}" ;
   dct:spatial :location ;
   foaf:page {{&pages}} .
   

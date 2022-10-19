@@ -184,6 +184,8 @@ class VPTemplateReader:
                     related = []
 
                 version = row[6].value
+                if version == None:
+                    version = "1"
 
                 if type(row[7].value) == str:
                     keywords = [item.strip() for item in row[7].value.split(";")]

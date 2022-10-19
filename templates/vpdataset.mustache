@@ -1,8 +1,6 @@
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
 @prefix dct: <http://purl.org/dc/terms/>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix language: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix wd: <https://www.wikidata.org/wiki/>.
 @prefix loc: <http://localhost/>.
 
 loc:new a dcat:Dataset.
@@ -13,3 +11,12 @@ loc:new dcat:keyword {{&keyword}}.
 {{#theme}}
 loc:new dcat:theme {{&theme}}.
 {{/theme}}
+{{#pages}}
+loc:new foaf:page {{&pages}} .
+{{/pages}}
+{{#language_url}}
+loc:new dct:language <{{&language_url}}>.
+{{/language_url}}
+{{#contact_url}}
+loc:new dcat:contactPoint <{{&contact_url}}>.
+{{/contact_url}}

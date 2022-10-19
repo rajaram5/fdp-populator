@@ -57,6 +57,7 @@ class Populator:
             organisations = vp_template_reader.get_organisations()
             biobanks = vp_template_reader.get_biobanks()
             patientregistries = vp_template_reader.get_patientregistries()
+            datasets = vp_template_reader.get_datasets()
 
             # Create organisation entries first
             for organisation_name, organisation in organisations.items():
@@ -65,12 +66,20 @@ class Populator:
                 for biobank_name, biobank in biobanks.items():
                     if biobank.PUBLISHER_NAME == organisation.TITLE:
                         biobank.PUBLISHER_URL = organisation_url
+                        test_url = organisation_url
                         self.create_resource(biobank, "biobank")
                 # Create patient registry entries
                 for patientregistry_name, patientregistry in patientregistries.items():
                     if patientregistry.PUBLISHER_NAME == organisation.TITLE:
                         patientregistry.PUBLISHER_URL = organisation_url
                         self.create_resource(patientregistry, "patientregistry")
+            
+            # Create datasets
+            for dataset_name, dataset in datasets.items():
+                print(test_url)
+                dataset.PUBLISHER_URL = test_url
+                dataset_url = self.create_resource(dataset, "dataset")
+
 
     def create_resource(self, resource, resource_type):
         """
@@ -93,6 +102,8 @@ class Populator:
 
         # Serialize graph and send to FDP
         post_body = graph.serialize(format='turtle')
+        print("Sending the following RDF to FDP:")
+        print(post_body)
         resource_url = self.FDP_CLIENT.fdp_create_metadata(post_body, resource_type)
         print("New " + resource_type + " created: " + resource_url)
         return resource_url
