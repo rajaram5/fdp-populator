@@ -42,3 +42,29 @@ class Utils:
             with open('../templates/license.mustache', 'r') as f:
                 turtle_string = chevron.render(f, {'license_url': resource.LICENSE_URL})
                 graph.parse(data=turtle_string, format="turtle")
+    
+    def list_to_rdf_literals(self, literal_list):
+        # Return empty string if None
+        if literal_list == None:
+            return ""
+
+        # Create literal list
+        literal_str = ""
+        for literal in literal_list:
+            literal_str = literal_str + ' "' + literal + '",'
+        literal_str = literal_str[:-1]
+
+        return literal_str
+
+    def list_to_rdf_URIs(self, URI_list):
+        # Return empty string if None
+        if URI_list == None:
+            return ""
+
+        # Create URI list
+        URI_str = ""
+        for URI in URI_list:
+            URI_str = URI_str + " <" + URI + ">,"
+        URI_str = URI_str[:-1]
+
+        return URI_str
