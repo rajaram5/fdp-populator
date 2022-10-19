@@ -1,5 +1,3 @@
-from ast import keyword
-from resource_classes import Dataset
 import Utils
 import chevron
 from rdflib import Graph
@@ -46,6 +44,7 @@ class VPDataset(VPResource.VPResource):
         self.LANGUAGE_URL = language
         self.LANDING_PAGE = page
         self.CONTACT_POINT = contact_point
+        # TODO: Implement vpconnection and related after schema update
         self.VPCONNECTION = vpconnection
         self.RELATED = related
     

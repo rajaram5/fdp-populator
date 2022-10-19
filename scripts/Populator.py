@@ -58,6 +58,7 @@ class Populator:
             biobanks = vp_template_reader.get_biobanks()
             patientregistries = vp_template_reader.get_patientregistries()
             datasets = vp_template_reader.get_datasets()
+            distributions = vp_template_reader.get_distributions()
 
             # Create organisation entries first
             for organisation_name, organisation in organisations.items():
@@ -79,6 +80,12 @@ class Populator:
                 print(test_url)
                 dataset.PUBLISHER_URL = test_url
                 dataset_url = self.create_resource(dataset, "dataset")
+
+                for distribution_name, distribution in distributions.items():
+                    if distribution.DATASET_TITLE == dataset_name:
+                        distribution.PARENT_URL = dataset_url
+                        distribution.PUBLISHER_URL = test_url
+                        self.create_resource(distribution, "distribution")
 
 
     def create_resource(self, resource, resource_type):

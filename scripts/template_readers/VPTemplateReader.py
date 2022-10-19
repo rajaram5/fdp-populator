@@ -1,7 +1,6 @@
 import Config
 import openpyxl
-from resource_classes import VPOrganisation, VPBiobank, VPPatientregistry, VPDataset
-
+from resource_classes import VPOrganisation, VPBiobank, VPPatientregistry, VPDataset, VPDistribution
 
 class VPTemplateReader:
     """
@@ -200,3 +199,48 @@ class VPTemplateReader:
                 datasets[dataset.TITLE] = dataset
 
         return datasets
+
+    def get_distributions(self):
+        """
+        This method creates distribution objects by extracting content from the ejp vp input file.
+        NOTE: This method assumes that provided input file follows this spec
+        <https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx>
+
+        :return: Dict of distributions
+        """
+        # Open organisation excel sheet
+        wb = openpyxl.load_workbook(Config.EJP_VP_INPUT_FILE)
+        ws = wb['Distribution']
+        
+        # Loop over rows of excel sheet
+        first_row = True
+        distributions = {}
+        for row in ws:
+            # Skip header
+            if first_row:
+                first_row=False
+                continue
+
+            if row[0].value != None:
+                # Retrieve field values from excel files
+                title = row[0].value
+                dataset_title = row[1].value
+                description = row[2].value
+                url = row[3].value
+                url_type = row[4].value
+                license = row[5].value
+                version = row[6].value
+                mediatype = row[7].value
+                publisher = row[8].value
+                if type(row[9].value) == str:
+                    ispartof = [item.strip() for item in row[9].value.split(";")]
+                else:
+                    ispartof = []
+
+                # Create dataset object and add to dataset dictionary
+                distribution = VPDistribution.VPDistribution(None, title, dataset_title, description,
+                                                            publisher, license, version, url, url_type,
+                                                            mediatype, ispartof)
+                distributions[distribution.TITLE] = distribution
+
+        return distributions
