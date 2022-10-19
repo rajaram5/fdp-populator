@@ -57,7 +57,7 @@ class VPBiobank():
         # Render RDF
         graph = Graph()
 
-        with open('../templates/biobank.mustache', 'r') as f:
+        with open('../templates/vpbiobank.mustache', 'r') as f:
             body = chevron.render(f, {'parent_url': self.PARENT_URL,
                                       'title': self.TITLE,
                                       'description': self.DESCRIPTION,

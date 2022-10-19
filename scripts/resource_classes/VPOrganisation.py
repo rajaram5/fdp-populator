@@ -45,7 +45,7 @@ class VPOrganisation():
         # Render RDF
         graph = Graph()
 
-        with open('../templates/organisation.mustache', 'r') as f:
+        with open('../templates/vporganisation.mustache', 'r') as f:
             body = chevron.render(f, {'parent_url': self.PARENT_URL,
                                       'title': self.TITLE,
                                       'description': self.DESCRIPTION,

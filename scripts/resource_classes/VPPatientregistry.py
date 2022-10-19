@@ -57,7 +57,7 @@ class VPPatientregistry():
         # Render RDF
         graph = Graph()
 
-        with open('../templates/patientregistry.mustache', 'r') as f:
+        with open('../templates/vppatientregistry.mustache', 'r') as f:
             body = chevron.render(f, {'parent_url': self.PARENT_URL,
                                       'title': self.TITLE,
                                       'description': self.DESCRIPTION,
