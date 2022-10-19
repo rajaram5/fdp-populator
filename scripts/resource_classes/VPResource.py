@@ -35,9 +35,6 @@ class VPResource:
             body = chevron.render(f, {'parent_url': self.PARENT_URL, 'title': self.TITLE,
                                       'description': self.DESCRIPTION, 'publisher_url': self.PUBLISHER_URL,
                                       'license_url': self.LICENSE_URL, 'version': self.VERSION})
-            print("VPResource class output:")
-            print("publisher:", self.PUBLISHER_URL)
-            print(body)
             graph.parse(data=body, format="turtle")
 
         return(graph)
