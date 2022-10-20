@@ -1,9 +1,7 @@
 import FDPClient
 import Config
-import chevron
 import Utils
 from template_readers import FDPTemplateReader, VPTemplateReader
-from rdflib import Graph
 
 
 
@@ -74,18 +72,18 @@ class Populator:
                     if patientregistry.PUBLISHER_NAME == organisation.TITLE:
                         patientregistry.PUBLISHER_URL = organisation_url
                         self.create_resource(patientregistry, "patientregistry")
-            
-            # Create datasets
-            for dataset_name, dataset in datasets.items():
-                print(test_url)
-                dataset.PUBLISHER_URL = test_url
-                dataset_url = self.create_resource(dataset, "dataset")
 
-                for distribution_name, distribution in distributions.items():
-                    if distribution.DATASET_TITLE == dataset_name:
-                        distribution.PARENT_URL = dataset_url
-                        distribution.PUBLISHER_URL = test_url
-                        self.create_resource(distribution, "distribution")
+                # Create datasets
+                for dataset_name, dataset in datasets.items():
+                    if dataset.PUBLISHER_NAME == organisation.TITLE:
+                        dataset.PUBLISHER_URL = organisation_url
+                        dataset_url = self.create_resource(dataset, "dataset")
+
+                        for distribution_name, distribution in distributions.items():
+                            if distribution.DATASET_TITLE == dataset_name:
+                                distribution.PARENT_URL = dataset_url
+                                distribution.PUBLISHER_URL = organisation_url
+                                self.create_resource(distribution, "distribution")
 
 
     def create_resource(self, resource, resource_type):
