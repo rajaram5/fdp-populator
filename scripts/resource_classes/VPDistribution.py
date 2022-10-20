@@ -15,13 +15,14 @@ class VPDistribution(VPResource.VPResource):
     ISPARTOF = []
 
 
-    def __init__(self, parent_url, title, dataset_title, description, publisher, license, version, url, url_type, mediatype, ispartof):
+    def __init__(self, parent_url, title, dataset_title, description, publisher_url, publisher_name, license, version, url, url_type, mediatype, ispartof):
         """
 
         :param parent_url: Parent's catalog URL of a dataset. NOTE this url should exist in an FDP
         :param title: Title of a dataset
         :param description: Description of a dataset
-        :param publisher: Publisher URL of a dataset (e.g. https://orcid.org/0000-0002-1215-167X)
+        :param publisher_url: Publisher URL of a resource (e.g. https://orcid.org/0000-0002-1215-167X)
+        :param publisher_name: Publisher name of a resource
         :param license: License URL of a resource (e.g. http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0)
         :param version
         :param url
@@ -30,7 +31,7 @@ class VPDistribution(VPResource.VPResource):
         :param ispartof
         """
         # Pass core properties to parent class
-        super().__init__(parent_url, title, description, publisher, license, version)
+        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version)
 
         self.DATASET_TITLE = dataset_title
         self.URL = url

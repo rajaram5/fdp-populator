@@ -191,11 +191,13 @@ class VPTemplateReader:
                 else:
                     keywords = []
 
-                publisher = row[8].value
+                publisher_name = row[8].value
                 page = row[9].value
 
                 # Create dataset object and add to dataset dictionary
-                dataset = VPDataset.VPDataset(Config.CATALOG_URL, title, description, keywords, themes, publisher, "en", license, page, None, vpconnection, related, version)
+                dataset = VPDataset.VPDataset(Config.CATALOG_URL, title, description, keywords, themes, 
+                                              None, publisher_name, "en", license, page, None, 
+                                              vpconnection, related, version)
                 datasets[dataset.TITLE] = dataset
 
         return datasets
@@ -231,7 +233,7 @@ class VPTemplateReader:
                 license = row[5].value
                 version = row[6].value
                 mediatype = row[7].value
-                publisher = row[8].value
+                publisher_name = row[8].value
                 if type(row[9].value) == str:
                     ispartof = [item.strip() for item in row[9].value.split(";")]
                 else:
@@ -239,8 +241,8 @@ class VPTemplateReader:
 
                 # Create dataset object and add to dataset dictionary
                 distribution = VPDistribution.VPDistribution(None, title, dataset_title, description,
-                                                            publisher, license, version, url, url_type,
-                                                            mediatype, ispartof)
+                                                             None, publisher_name, license, version, url, url_type,
+                                                             mediatype, ispartof)
                 distributions[distribution.TITLE] = distribution
 
         return distributions

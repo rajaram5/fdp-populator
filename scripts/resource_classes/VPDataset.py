@@ -18,8 +18,8 @@ class VPDataset(VPResource.VPResource):
     CONTACT_POINT = None
 
 
-    def __init__(self, parent_url, title, description, keywords, themes, publisher, language,
-                 license, page, contact_point, vpconnection, related, version):
+    def __init__(self, parent_url, title, description, keywords, themes, publisher_url, publisher_name,
+                 language, license, page, contact_point, vpconnection, related, version):
         """
 
         :param parent_url: Parent's catalog URL of a dataset. NOTE this url should exist in an FDP
@@ -27,7 +27,8 @@ class VPDataset(VPResource.VPResource):
         :param description: Description of a dataset
         :param keywords: Keywords to describe a dataset
         :param themes: Themes URLs to describe a dataset
-        :param publisher: Publisher URL of a dataset (e.g. https://orcid.org/0000-0002-1215-167X)
+        :param publisher_url: Publisher URL of a resource (e.g. https://orcid.org/0000-0002-1215-167X)
+        :param publisher_name: Publisher name of a resource
         :param language: Language URL of a dataset (e.g. http://id.loc.gov/vocabulary/iso639-1/en)
         :param license: License URL of a resource (e.g. http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0)
         :param page: Landing page URL of a dataset
@@ -37,7 +38,7 @@ class VPDataset(VPResource.VPResource):
         :param version
         """
         # Pass core properties to parent class
-        super().__init__(parent_url, title, description, publisher, license, version)
+        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version)
 
         self.KEYWORDS = keywords
         self.THEMES = themes
