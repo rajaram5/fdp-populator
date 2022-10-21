@@ -1,0 +1,15 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix loc: <http://localhost/>.
+
+
+loc:new a dcat:DataService ;
+    dcat:endpointURL <{{&endpoint_url}}> .
+ 
+{{#dataset_urls}}
+loc:new dcat:servesDataset {{&dataset_urls}} .
+{{/dataset_urls}}
+{{#conforms_to}}
+loc:new dct:conformsTo {{&conforms_to}} .
+{{/conforms_to}}

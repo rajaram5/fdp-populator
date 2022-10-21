@@ -1,6 +1,6 @@
 import Config
 import openpyxl
-from resource_classes import VPOrganisation, VPBiobank, VPPatientregistry, VPDataset, VPDistribution
+from resource_classes import VPOrganisation, VPBiobank, VPPatientregistry, VPDataset, VPDistribution, VPDataService
 
 class VPTemplateReader:
     """
@@ -239,10 +239,53 @@ class VPTemplateReader:
                 else:
                     ispartof = []
 
-                # Create dataset object and add to dataset dictionary
+                # Create distribution object and add to distribution dictionary
                 distribution = VPDistribution.VPDistribution(None, title, dataset_title, description,
                                                              None, publisher_name, license, version, url, url_type,
                                                              mediatype, ispartof)
                 distributions[distribution.TITLE] = distribution
 
         return distributions
+    
+    def get_dataservices(self):
+        """
+        This method creates dataservice objects by extracting content from the ejp vp input file.
+        NOTE: This method assumes that provided input file follows this spec
+        <https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx>
+
+        :return: Dict of dataservices
+        """
+        # Open organisation excel sheet
+        wb = openpyxl.load_workbook(Config.EJP_VP_INPUT_FILE)
+        ws = wb['DataService']
+        
+        # Loop over rows of excel sheet
+        first_row = True
+        dataservices = {}
+        for row in ws:
+            # Skip header
+            if first_row:
+                first_row=False
+                continue
+
+            if row[0].value != None:
+                # Retrieve field values from excel files
+                title = row[0].value
+                description = row[1].value
+                license = row[2].value
+                endpoint_url = row[3].value
+                if type(row[4].value) == str:
+                    dataset_names = [item.strip() for item in row[4].value.split(";")]
+                else:
+                    dataset_names = []
+                version = row[5].value
+                publisher_name = row[6].value
+                conforms_to = row[7].value
+
+                # Create dataservice object and add to dataservice dictionary
+                dataservice = VPDataService.VPDataService(None, title, description, None, publisher_name, license,
+                                                          version, endpoint_url, dataset_names, None,
+                                                          conforms_to)
+                dataservices[dataservice.TITLE] = dataservice
+
+        return dataservices
