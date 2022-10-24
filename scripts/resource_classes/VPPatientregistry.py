@@ -5,6 +5,7 @@ class VPPatientregistry():
     """
     This class describes the patient registry class
     """
+    URL = None
     PARENT_URL = None
     PUBLISHER_URL = None
     TITLE = None

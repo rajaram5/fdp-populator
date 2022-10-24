@@ -2,6 +2,7 @@ import FDPClient
 import Config
 import Utils
 from template_readers import FDPTemplateReader, VPTemplateReader
+import uuid
 
 
 
@@ -60,30 +61,52 @@ class Populator:
 
             # Create organisation entries first
             for organisation_name, organisation in organisations.items():
-                organisation_url = self.create_resource(organisation, "organisation")
+                organisation.URL = self.create_resource(organisation, "organisation")
+
                 # Create biobank entries
                 for biobank_name, biobank in biobanks.items():
+                # Link organisation
+                for organisation_name, organisation in organisations.items():
                     if biobank.PUBLISHER_NAME == organisation.TITLE:
-                        biobank.PUBLISHER_URL = organisation_url
-                        test_url = organisation_url
-                        self.create_resource(biobank, "biobank")
+                        biobank.PUBLISHER_URL = organisation.URL
+                
+                # Create entry
+                biobank.URL = self.create_resource(biobank, "biobank")
+
                 # Create patient registry entries
                 for patientregistry_name, patientregistry in patientregistries.items():
+                # Link organisation
+                for organisation_name, organisation in organisations.items():
                     if patientregistry.PUBLISHER_NAME == organisation.TITLE:
-                        patientregistry.PUBLISHER_URL = organisation_url
-                        self.create_resource(patientregistry, "patientregistry")
+                        patientregistry.PUBLISHER_URL = organisation.URL
+
+                # Create entry
+                patientregistry.URL = self.create_resource(patientregistry, "patientregistry")
 
                 # Create datasets
                 for dataset_name, dataset in datasets.items():
+                # Link organisation
+                for organisation_name, organisation in organisations.items():
                     if dataset.PUBLISHER_NAME == organisation.TITLE:
-                        dataset.PUBLISHER_URL = organisation_url
-                        dataset_url = self.create_resource(dataset, "dataset")
+                        dataset.PUBLISHER_URL = organisation.URL
 
+                # Create entry
+                dataset.URL = self.create_resource(dataset, "dataset")
+
+            # Create distributions
                         for distribution_name, distribution in distributions.items():
-                            if distribution.DATASET_TITLE == dataset_name:
-                                distribution.PARENT_URL = dataset_url
-                                distribution.PUBLISHER_URL = organisation_url
-                                self.create_resource(distribution, "distribution")
+                # Link organisation
+                for organisation_name, organisation in organisations.items():
+                    if distribution.PUBLISHER_NAME == organisation.TITLE:
+                        distribution.PUBLISHER_URL = organisation.URL
+
+                # Link dataset
+                for dataset_name, dataset in datasets.items():
+                    if distribution.DATASET_TITLE == dataset.TITLE:
+                        distribution.PARENT_URL = dataset.URL
+
+                # Create entry
+                distribution.URL = self.create_resource(distribution, "distribution")
 
 
     def create_resource(self, resource, resource_type):

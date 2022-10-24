@@ -5,6 +5,7 @@ class VPBiobank():
     """
     This class describes the biobank class
     """
+    URL = None
     PARENT_URL = None
     PUBLISHER_URL = None
     TITLE = None

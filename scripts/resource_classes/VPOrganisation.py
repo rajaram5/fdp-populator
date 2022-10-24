@@ -5,6 +5,7 @@ class VPOrganisation():
     """
     This class describes the organisation class
     """
+    URL = None
     PARENT_URL = None
     TITLE = None
     DESCRIPTION = None

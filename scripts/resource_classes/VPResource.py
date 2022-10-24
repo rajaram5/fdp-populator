@@ -5,6 +5,7 @@ class VPResource:
     """
     Super class contents generic resource metadata properties
     """
+    URL = None
     PARENT_URL = None
     TITLE = None
     DESCRIPTION = None
