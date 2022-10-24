@@ -118,8 +118,8 @@ class Populator:
 
                 # Link organisation
                 for organisation_name, organisation in organisations.items():
-                    if distribution.PUBLISHER_NAME == organisation.TITLE:
-                        distribution.PUBLISHER_URL = organisation.URL
+                    if dataservice.PUBLISHER_NAME == organisation.TITLE:
+                        dataservice.PUBLISHER_URL = organisation.URL
 
                 # Create entry
                 dataservice.URL = self.create_resource(dataservice, "dataservice")
