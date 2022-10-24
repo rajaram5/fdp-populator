@@ -11,6 +11,7 @@ FDP_PERSISTENT_URL = os.environ['FDP_PERSISTENT_URL']
 DATASET_INPUT_FILE = None
 DISTRIBUTION_INPUT_FILE = None
 EJP_VP_INPUT_FILE = None
+DRY_RUN = None
 CATALOG_URL = None
 CONFIG_FILE = os.environ['CONFIG_FILE']
 BASE_PATH = os.environ['BASE_PATH']
@@ -31,6 +32,13 @@ if os.path.isfile(CONFIG_FILE) :
         EJP_VP_INPUT_FILE = BASE_PATH + config['ejp_vp_file']
     except:
         pass
+
+    try:
+        DRY_RUN = config['dry_run']
+        if DRY_RUN not in (True, False):
+            DRY_RUN = False
+    except:
+        DRY_RUN = False
 
     CATALOG_URL = config['catalog_url']
 else:

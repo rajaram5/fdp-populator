@@ -97,8 +97,8 @@ class Populator:
         # Check if parent exists
         parent_url = resource.PARENT_URL
 
-        if not self.FDP_CLIENT.does_metadata_exists(parent_url):
-            raise SystemExit("The catalog <"+parent_url+"> doesn't exist. Provide valid catalog URL")
+        if not Config.DRY_RUN and not self.FDP_CLIENT.does_metadata_exists(parent_url):
+            raise SystemExit("The parent metadata <"+parent_url+"> does not exist. Provide valid catalog URL")
 
         print("The catalog <"+parent_url+"> exist")
 
@@ -109,6 +109,9 @@ class Populator:
         post_body = graph.serialize(format='turtle')
         print("Sending the following RDF to FDP:")
         print(post_body)
+        if Config.DRY_RUN:
+            resource_url = "http://example.org/dry_run_FDP/" + resource_type + "/" + str(uuid.uuid4())
+        else:
         resource_url = self.FDP_CLIENT.fdp_create_metadata(post_body, resource_type)
         print("New " + resource_type + " created: " + resource_url)
         return resource_url
