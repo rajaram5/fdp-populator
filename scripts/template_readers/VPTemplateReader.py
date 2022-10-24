@@ -283,8 +283,8 @@ class VPTemplateReader:
                 conforms_to = row[7].value
 
                 # Create dataservice object and add to dataservice dictionary
-                dataservice = VPDataService.VPDataService(None, title, description, None, publisher_name, license,
-                                                          version, endpoint_url, dataset_names, None,
+                dataservice = VPDataService.VPDataService(Config.CATALOG_URL, title, description, None, publisher_name, license,
+                                                          version, endpoint_url, dataset_names, [],
                                                           conforms_to)
                 dataservices[dataservice.TITLE] = dataservice
 

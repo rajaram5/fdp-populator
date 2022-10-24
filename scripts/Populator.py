@@ -58,13 +58,14 @@ class Populator:
             patientregistries = vp_template_reader.get_patientregistries()
             datasets = vp_template_reader.get_datasets()
             distributions = vp_template_reader.get_distributions()
+            dataservices = vp_template_reader.get_dataservices()
 
             # Create organisation entries first
             for organisation_name, organisation in organisations.items():
                 organisation.URL = self.create_resource(organisation, "organisation")
 
-                # Create biobank entries
-                for biobank_name, biobank in biobanks.items():
+            # Create biobank entries
+            for biobank_name, biobank in biobanks.items():
                 # Link organisation
                 for organisation_name, organisation in organisations.items():
                     if biobank.PUBLISHER_NAME == organisation.TITLE:
@@ -73,8 +74,8 @@ class Populator:
                 # Create entry
                 biobank.URL = self.create_resource(biobank, "biobank")
 
-                # Create patient registry entries
-                for patientregistry_name, patientregistry in patientregistries.items():
+            # Create patient registry entries
+            for patientregistry_name, patientregistry in patientregistries.items():
                 # Link organisation
                 for organisation_name, organisation in organisations.items():
                     if patientregistry.PUBLISHER_NAME == organisation.TITLE:
@@ -83,8 +84,8 @@ class Populator:
                 # Create entry
                 patientregistry.URL = self.create_resource(patientregistry, "patientregistry")
 
-                # Create datasets
-                for dataset_name, dataset in datasets.items():
+            # Create datasets
+            for dataset_name, dataset in datasets.items():
                 # Link organisation
                 for organisation_name, organisation in organisations.items():
                     if dataset.PUBLISHER_NAME == organisation.TITLE:
@@ -94,7 +95,7 @@ class Populator:
                 dataset.URL = self.create_resource(dataset, "dataset")
 
             # Create distributions
-                        for distribution_name, distribution in distributions.items():
+            for distribution_name, distribution in distributions.items():
                 # Link organisation
                 for organisation_name, organisation in organisations.items():
                     if distribution.PUBLISHER_NAME == organisation.TITLE:
@@ -108,6 +109,20 @@ class Populator:
                 # Create entry
                 distribution.URL = self.create_resource(distribution, "distribution")
 
+            # Create dataservices
+            for dataservice_name, dataservice in dataservices.items():
+                # Link datasets
+                for dataset_name, dataset in datasets.items():
+                    if dataset.TITLE in dataservice.DATASET_NAMES:
+                        dataservice.DATASET_URLS.append(dataset.URL)
+
+                # Link organisation
+                for organisation_name, organisation in organisations.items():
+                    if distribution.PUBLISHER_NAME == organisation.TITLE:
+                        distribution.PUBLISHER_URL = organisation.URL
+
+                # Create entry
+                dataservice.URL = self.create_resource(dataservice, "dataservice")
 
     def create_resource(self, resource, resource_type):
         """
@@ -135,6 +150,6 @@ class Populator:
         if Config.DRY_RUN:
             resource_url = "http://example.org/dry_run_FDP/" + resource_type + "/" + str(uuid.uuid4())
         else:
-        resource_url = self.FDP_CLIENT.fdp_create_metadata(post_body, resource_type)
+            resource_url = self.FDP_CLIENT.fdp_create_metadata(post_body, resource_type)
         print("New " + resource_type + " created: " + resource_url)
         return resource_url

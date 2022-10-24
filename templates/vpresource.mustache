@@ -4,7 +4,6 @@
 @prefix loc: <http://localhost/>.
 
 loc:new
-    dct:license <{{&license_url}}>;
     dct:isPartOf <{{&parent_url}}>;
     dct:hasVersion "{{version}}";
     dct:title "{{title}}".
@@ -15,3 +14,6 @@ loc:new dct:description "{{description}}".
 {{#publisher_url}}
 loc:new dct:publisher <{{&publisher_url}}>.
 {{/publisher_url}}
+{{#license_url}}
+loc:new dct:license <{{&license_url}}>.
+{{/license_url}}

@@ -8,8 +8,8 @@ class VPDataService(VPResource.VPResource):
     This class extends Resource class with properties specific to dataset properties
     """
     ENDPOINT_URL = None
-    SERVES_DATASET_NAMES = []
-    SERVES_DATASET_URLS = []
+    DATASET_NAMES = []
+    DATASET_URLS = []
     CONFORMS_TO = None
 
 
@@ -32,8 +32,8 @@ class VPDataService(VPResource.VPResource):
         super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version)
 
         self.ENDPOINT_URL = endpoint_url
-        self.SERVES_DATASET_NAMES = serves_dataset_names
-        self.SERVES_DATASET_URLS = serves_dataset_urls
+        self.DATASET_NAMES = serves_dataset_names
+        self.DATASET_URLS = serves_dataset_urls
         self.CONFORMS_TO = conforms_to
     
     def get_graph(self):
@@ -45,7 +45,7 @@ class VPDataService(VPResource.VPResource):
         utils = Utils.Utils()
         graph = super().get_graph()
 
-        serves_datasets_str = utils.list_to_rdf_URIs(self.SERVES_DATASET_URLS)
+        serves_datasets_str = utils.list_to_rdf_URIs(self.DATASET_URLS)
 
         with open('../templates/vpdataservice.mustache', 'r') as f:
             body = chevron.render(f, {'endpoint_url': self.ENDPOINT_URL, 'dataset_urls': serves_datasets_str,
