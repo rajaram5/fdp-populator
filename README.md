@@ -3,7 +3,7 @@ The FAIR Data Point Populator Populator FDPs with metadata entries from an excel
 
 
 
-## Usage
+## Usage (EJP RD template)
 1. Download the [template](https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx) from [here](https://github.com/ejp-rd-vp/resource-metadata-schema) and follow the instructions for filling it in.
 
 2. Upload the filled in template to a folder in the repository linked to the FDP of choice, or ask the administrator of the repository to do this and the following steps.
