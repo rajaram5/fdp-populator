@@ -58,6 +58,8 @@ class VPDataset(VPResource.VPResource):
         utils = Utils.Utils()
         graph = super().get_graph()
 
+        self.THEMES.append(self.VPCONNECTION)
+
         theme_str = utils.list_to_rdf_URIs(self.THEMES)
         page_str = utils.list_to_rdf_URIs(self.LANDING_PAGE)
         keyword_str = utils.list_to_rdf_literals(self.KEYWORDS)
