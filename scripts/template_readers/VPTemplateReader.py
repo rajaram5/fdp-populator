@@ -91,7 +91,12 @@ class VPTemplateReader:
                     pages = []
 
                 resource_type = row[7].value
-                keywords = row[8].value
+
+                if type(row[8].value) == str:
+                    keywords = [item.strip() for item in row[8].value.split(";")]
+                else:
+                    keywords = []
+
                 language = row[9].value
                 access = row[10].value
                 access_type = row[11].value
@@ -146,7 +151,12 @@ class VPTemplateReader:
                     pages = []
 
                 resource_type = row[7].value
-                keywords = row[8].value
+
+                if type(row[8].value) == str:
+                    keywords = [item.strip() for item in row[8].value.split(";")]
+                else:
+                    keywords = []
+
                 language = row[9].value
                 access = row[10].value
                 access_type = row[11].value
@@ -305,7 +315,10 @@ class VPTemplateReader:
                 else:
                     dataset_names = []
                 version = row[6].value
-                keywords = row[7].value
+                if type(row[7].value) == str:
+                    keywords = [item.strip() for item in row[7].value.split(";")]
+                else:
+                    keywords = []
                 publisher_name = row[8].value
                 conforms_to = row[9].value
                 access = row[10].value
