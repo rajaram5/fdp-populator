@@ -19,7 +19,7 @@ class VPDataset(VPResource.VPResource):
 
 
     def __init__(self, parent_url, title, description, keywords, themes, publisher_url, publisher_name,
-                 language, license, page, contact_point, vpconnection, related, version):
+                 language, license, page, contact_point, vpconnection, related, version, access, access_type):
         """
 
         :param parent_url: Parent's catalog URL of a dataset. NOTE this url should exist in an FDP
@@ -38,7 +38,7 @@ class VPDataset(VPResource.VPResource):
         :param version
         """
         # Pass core properties to parent class
-        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version)
+        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version, access, access_type)
 
         self.KEYWORDS = keywords
         self.THEMES = themes

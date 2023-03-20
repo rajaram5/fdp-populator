@@ -15,7 +15,7 @@ class VPDistribution(VPResource.VPResource):
     ISPARTOF = []
 
 
-    def __init__(self, parent_url, title, dataset_title, description, publisher_url, publisher_name, license, version, url, url_type, mediatype, ispartof):
+    def __init__(self, parent_url, title, dataset_title, description, publisher_url, publisher_name, license, version, url, url_type, mediatype, ispartof, access, access_type):
         """
 
         :param parent_url: Parent's catalog URL of a dataset. NOTE this url should exist in an FDP
@@ -31,7 +31,7 @@ class VPDistribution(VPResource.VPResource):
         :param ispartof
         """
         # Pass core properties to parent class
-        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version)
+        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version, access, access_type)
 
         self.DATASET_TITLE = dataset_title
         self.URL = url
@@ -60,3 +60,4 @@ class VPDistribution(VPResource.VPResource):
             graph.parse(data=body, format="turtle")
 
         return graph
+    

@@ -13,7 +13,7 @@ class VPDataService(VPResource.VPResource):
     CONFORMS_TO = None
 
 
-    def __init__(self, parent_url, title, description, publisher_url, publisher_name, license, version, endpoint_url, serves_dataset_names, serves_dataset_urls, conforms_to):
+    def __init__(self, parent_url, title, description, publisher_url, publisher_name, license, version, endpoint_url, serves_dataset_names, serves_dataset_urls, conforms_to, access, access_type):
         """
 
         :param parent_url: Parent's FDP URL of a resource
@@ -29,7 +29,7 @@ class VPDataService(VPResource.VPResource):
         :param conforms to: specification the dataservice conforms to TODO: double check
         """
         # Pass core properties to parent class
-        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version)
+        super().__init__(parent_url, title, description, publisher_url, publisher_name, license, version, access, access_type)
 
         self.ENDPOINT_URL = endpoint_url
         self.DATASET_NAMES = serves_dataset_names

@@ -228,7 +228,7 @@ class VPTemplateReader:
                 # Create dataset object and add to dataset dictionary
                 dataset = VPDataset.VPDataset(Config.CATALOG_URL, title, description, keywords, themes, 
                                               None, publisher_name, "en", license, page, None, 
-                                              vpconnection, related, version)
+                                              vpconnection, related, version, access, access_type)
                 datasets[dataset.TITLE] = dataset
 
         return datasets
@@ -276,7 +276,7 @@ class VPTemplateReader:
                 # Create distribution object and add to distribution dictionary
                 distribution = VPDistribution.VPDistribution(None, title, dataset_title, description,
                                                              None, publisher_name, license, version, url, url_type,
-                                                             mediatype, ispartof)
+                                                             mediatype, ispartof, access, access_type)
                 distributions[distribution.TITLE] = distribution
 
         return distributions
@@ -327,7 +327,7 @@ class VPTemplateReader:
                 # Create dataservice object and add to dataservice dictionary
                 dataservice = VPDataService.VPDataService(Config.CATALOG_URL, title, description, None, publisher_name, license,
                                                           version, endpoint_url, dataset_names, [],
-                                                          conforms_to)
+                                                          conforms_to, access, access_type)
                 dataservices[dataservice.TITLE] = dataservice
 
         return dataservices

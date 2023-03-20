@@ -14,7 +14,7 @@ class VPResource:
     LICENSE_URL = None
     VERSION = None
 
-    def __init__(self, parent_url, title, description, publisher_url, publisher_name, license, version):
+    def __init__(self, parent_url, title, description, publisher_url, publisher_name, license, version, access, access_type):
         """
         :param parent_url: Parent's FDP URL of a resource
         :param title: Title of a resource
@@ -31,14 +31,25 @@ class VPResource:
         self.PUBLISHER_NAME = publisher_name
         self.LICENSE_URL = license
         self.VERSION = version
+        self.ACCESS = access
+        self.ACCESS_TYPE = access_type
 
     def get_graph(self):
         graph = Graph()
 
+        if self.ACCESS_TYPE == "Access Information":
+            self.ACCESS_TYPE = "dct:accessRight"
+        elif self.ACCESS_TYPE == "ODRL Policy":
+            self.ACCESS_TYPE = "odrl:hasPolicy"
+        else:
+            print("Unexcepted access type: ", self.ACCESS_TYPE, ", defaulting to no access information")
+            self.ACCESS = ""
+
         with open('../templates/vpresource.mustache', 'r') as f:
             body = chevron.render(f, {'parent_url': self.PARENT_URL, 'title': self.TITLE,
                                       'description': self.DESCRIPTION, 'publisher_url': self.PUBLISHER_URL,
-                                      'license_url': self.LICENSE_URL, 'version': self.VERSION})
+                                      'license_url': self.LICENSE_URL, 'version': self.VERSION,
+                                      'access': self.ACCESS, 'access_type': self.ACCESS_TYPE})
             graph.parse(data=body, format="turtle")
 
         return(graph)
