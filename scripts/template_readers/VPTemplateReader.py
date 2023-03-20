@@ -28,6 +28,7 @@ class VPTemplateReader:
                 first_row=False
                 continue
 
+            # Read row if it exists
             if row[0].value != None:
                 # Retrieve field values from excel files
                 title = row[0].value
@@ -68,6 +69,7 @@ class VPTemplateReader:
                 first_row=False
                 continue
 
+            # Read row if it exists
             if row[0].value != None:
                 # Retrieve field values from excel files
                 title = row[0].value
@@ -79,14 +81,20 @@ class VPTemplateReader:
                 else:
                     themes = []
 
-                publisher_name = row[4].value
+                conforms_to = row[4].value
 
-                if type(row[5].value) == str:
-                    pages = [page.strip() for page in row[5].value.split(";")]
+                publisher_name = row[5].value
+
+                if type(row[6].value) == str:
+                    pages = [page.strip() for page in row[6].value.split(";")]
                 else:
                     pages = []
 
-                resource_type = row[6].value
+                resource_type = row[7].value
+                keywords = row[8].value
+                language = row[9].value
+                access = row[10].value
+                access_type = row[11].value
 
                 # Create biobank object and add to biobank dictionary if it is a biobank
                 if resource_type == "Biobank":
@@ -116,6 +124,7 @@ class VPTemplateReader:
                 first_row=False
                 continue
 
+            # Read row if it exists
             if row[0].value != None:
                 # Retrieve field values from excel files
                 title = row[0].value
@@ -127,14 +136,20 @@ class VPTemplateReader:
                 else:
                     themes = []
 
-                publisher_name = row[4].value
+                conforms_to = row[4].value
 
-                if type(row[5].value) == str:
-                    pages = [page.strip() for page in row[5].value.split(";")]
+                publisher_name = row[5].value
+
+                if type(row[6].value) == str:
+                    pages = [page.strip() for page in row[6].value.split(";")]
                 else:
                     pages = []
 
-                resource_type = row[6].value
+                resource_type = row[7].value
+                keywords = row[8].value
+                language = row[9].value
+                access = row[10].value
+                access_type = row[11].value
 
                 # Create patient registry object and add to patientregistry dictionary if it is a patientregistry
                 if resource_type == "Patient registry":
@@ -164,6 +179,7 @@ class VPTemplateReader:
                 first_row=False
                 continue
 
+            # Read row if it exists
             if row[0].value != None:
                 # Retrieve field values from excel files
                 title = row[0].value
@@ -194,6 +210,11 @@ class VPTemplateReader:
                 publisher_name = row[8].value
                 page = row[9].value
 
+                language = row[10].value
+                conforms_to = row[11].value
+                access = row[12].value
+                access_type = row[13].value
+
                 # Create dataset object and add to dataset dictionary
                 dataset = VPDataset.VPDataset(Config.CATALOG_URL, title, description, keywords, themes, 
                                               None, publisher_name, "en", license, page, None, 
@@ -223,6 +244,7 @@ class VPTemplateReader:
                 first_row=False
                 continue
 
+            # Read row if it exists
             if row[0].value != None:
                 # Retrieve field values from excel files
                 title = row[0].value
@@ -238,6 +260,8 @@ class VPTemplateReader:
                     ispartof = [item.strip() for item in row[9].value.split(";")]
                 else:
                     ispartof = []
+                access = row[10].value
+                access_type = row[11].value
 
                 # Create distribution object and add to distribution dictionary
                 distribution = VPDistribution.VPDistribution(None, title, dataset_title, description,
@@ -268,19 +292,24 @@ class VPTemplateReader:
                 first_row=False
                 continue
 
+            # Read row if it exists
             if row[0].value != None:
                 # Retrieve field values from excel files
                 title = row[0].value
                 description = row[1].value
-                license = row[2].value
-                endpoint_url = row[3].value
-                if type(row[4].value) == str:
-                    dataset_names = [item.strip() for item in row[4].value.split(";")]
+                endpoint_description = row[2].value
+                license = row[3].value
+                endpoint_url = row[4].value
+                if type(row[5].value) == str:
+                    dataset_names = [item.strip() for item in row[5].value.split(";")]
                 else:
                     dataset_names = []
-                version = row[5].value
-                publisher_name = row[6].value
-                conforms_to = row[7].value
+                version = row[6].value
+                keywords = row[7].value
+                publisher_name = row[8].value
+                conforms_to = row[9].value
+                access = row[10].value
+                access_type = row[11].value
 
                 # Create dataservice object and add to dataservice dictionary
                 dataservice = VPDataService.VPDataService(Config.CATALOG_URL, title, description, None, publisher_name, license,
