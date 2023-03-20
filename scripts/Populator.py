@@ -148,7 +148,7 @@ class Populator:
         print("Sending the following RDF to FDP:")
         print(post_body)
         if Config.DRY_RUN:
-            resource_url = "http://example.org/dry_run_FDP/" + resource_type + "/" + str(uuid.uuid4())
+            resource_url = "http://example.org/" + resource_type + "/" + str(uuid.uuid4())
         else:
             resource_url = self.FDP_CLIENT.fdp_create_metadata(post_body, resource_type)
         print("New " + resource_type + " created: " + resource_url)
