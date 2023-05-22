@@ -1,13 +1,23 @@
-# fdp-populator
-The FAIR Data Point Populator Populator FDPs with metadata entries from an excel template. It uses a GitHub action to automatically read the template, and publish the entries in a FAIR Data Point.
+# FDP Populator
+## Introduction
+The FDPP was created to help people not very familiar with FAIR, to create metadata in Excel sheets, and have these published in a FAIR Data Point (https://www.fairdatapoint.org/). The FDPP is a GitHub workflow, that reads the metadata from the repository, transforms this into RDF, and then publishes this on a FAIR Data Point.
 
+## Set up
+* If there is no FDP yet, set one up locally (https://fairdatapoint.readthedocs.io/en/latest/deployment/local-deployment.html) or online (https://fairdatapoint.readthedocs.io/en/latest/deployment/production-deployment.html).
+* Make a metadata repository like https://github.com/LUMC-BioSemantics/ejprd-wp13-metadata. This repository is connected to the FAIR Data Point Populator GitHub repository.
+* Connect the metadata repository to a FAIR Data Point by setting the GitHub secrets in the metadata repository.
+	* FDP URL
+	* FDP Persistant URL
+	* Username
+	* password
 
+## Use
+* The **user** fills in the [FPD](https://github.com/LUMC-BioSemantics/EJP-RD-WP13-FDP-template) or [EJPRD](https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx) template.
+* The **user** uploads the template to the metadata repository (or hands it over to the administrator for the administrator to upload).
+* The **administrator** checks the metadata.
+* The **administrator** sets the target metadata and target catalog in the config.yml file, and starts the workflow using the start workflow button.
+* The **FDPP** converts the metadata from the Excel sheet into RDF documents.
+* The **FDPP** publishes the RDF into the connected FAIR Data Point.
 
-## Usage (EJP RD template)
-1. Download the [template](https://github.com/ejp-rd-vp/resource-metadata-schema/blob/master/template/EJPRD%20Resource%20Metadata%20template.xlsx) from [here](https://github.com/ejp-rd-vp/resource-metadata-schema) and follow the instructions for filling it in.
-
-2. Upload the filled in template to a folder in the repository linked to the FDP of choice, or ask the administrator of the repository to do this and the following steps.
-
-3. Change the config.yml file to point to the target Excel template and FDP catalog.
-
-4. Press the run workflow button in the GitHub actions tab.
+## EJPRD
+The EJPRD version of the tool is being prepared for users, and is in the VP branch of this repository.
