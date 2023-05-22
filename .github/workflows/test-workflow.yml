@@ -32,6 +32,6 @@ jobs:
           FDP_PERSISTENT_URL: ${{ vars.FDP_PERSISTENT_URL }}
           FDP_USERNAME: ${{ secrets.FDP_USERNAME }}
           FDP_PASSWORD: ${{ secrets.FDP_PASSWORD }}
-          BASE_PATH: "."
-          CONFIG_FILE: "./config.yml"
+          BASE_PATH: ".."
+          CONFIG_FILE: "../config.yml"
         run: python main.py

@@ -42,4 +42,4 @@ if os.path.isfile(CONFIG_FILE) :
 
     CATALOG_URL = config['catalog_url']
 else:
-    raise SystemExit("Config file does exits. Provided input file " + CONFIG_FILE)
+    raise SystemExit("Config file does not exist. Provided input file path: " + CONFIG_FILE)
