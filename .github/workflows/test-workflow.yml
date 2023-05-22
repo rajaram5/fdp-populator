@@ -28,9 +28,10 @@ jobs:
       - name: Test script
         working-directory: ./scripts
         env:
-          FDP_URL: ${{ secrets.FDP_URL }}
-          FDP_PERSISTENT_URL: ${{ secrets.FDP_PERSISTENT_URL }}
+          FDP_URL: ${{ vars.FDP_URL }}
+          FDP_PERSISTENT_URL: ${{ vars.FDP_PERSISTENT_URL }}
           FDP_USERNAME: ${{ secrets.FDP_USERNAME }}
           FDP_PASSWORD: ${{ secrets.FDP_PASSWORD }}
-          INPUT_FILE: "../catalogs.csv"
+          BASE_PATH: "."
+          CONFIG_FILE: "./config.yml"
         run: python main.py
