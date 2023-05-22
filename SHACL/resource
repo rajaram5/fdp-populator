@@ -31,7 +31,7 @@
     ) ;
     sh:minCount 1 ;
     sh:maxCount 1 ;
-    dash:editor dash:BlankNodeEditor ;
+    dash:editor dash:URIEditor ;
   ], [
     sh:path dct:hasVersion ;
     sh:name "version" ;
