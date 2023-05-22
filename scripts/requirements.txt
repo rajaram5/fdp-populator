@@ -2,3 +2,4 @@ requests
 chevron
 pyyaml
 rdflib
+openpyxl
