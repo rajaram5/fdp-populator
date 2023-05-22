@@ -22,14 +22,14 @@ if os.path.isfile(CONFIG_FILE) :
 
     # Check for FDP template configuration
     try:
-        DATASET_INPUT_FILE = BASE_PATH + config['dataset_file']
-        DISTRIBUTION_INPUT_FILE = BASE_PATH + config['distribution']
+        DATASET_INPUT_FILE = os.path.join(BASE_PATH, config['dataset_file'])
+        DISTRIBUTION_INPUT_FILE = os.path.join(BASE_PATH, config['distribution'])
     except:
         pass
 
     # Check for VP template configuration
     try:
-        EJP_VP_INPUT_FILE = BASE_PATH + config['ejp_vp_file']
+        EJP_VP_INPUT_FILE = os.path.join(BASE_PATH, config['ejp_vp_file'])
     except:
         pass
 
